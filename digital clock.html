@@ -6,7 +6,7 @@
     <title>Document</title>
     <style>
         body{
-             background-color: rgba(4, 99, 243, 0.9);
+             background-color:black;
         }
         .parent {
             display: flex;
@@ -16,8 +16,9 @@
         .child1 {
             width: 650px;
             height: 200px;
-            border: 1px solid black;
+            border: 5px solid black;
             border-radius: 30px 30px 30px 30px;
+            background-color: white;
         }
         .child2 {
             width: 100%;
@@ -28,6 +29,7 @@
             align-items: center;
             font-size: xx-large;
             font-weight: bolder;
+            flex-wrap: wrap;
         }
         .child3 {
               width: 100%;
@@ -38,14 +40,17 @@
             align-items: center;
             font-size: xx-large;
             font-weight: bolder;
-        }
+            flex-wrap: wrap;
+}
         .name {
             color: blue;
         }
         .child4 {
             font-size: large;
+            flex-wrap: wrap;
         }
-    </style>
+    
+</style>
 </head>
 <body>
     <div class="parent">
@@ -74,7 +79,7 @@
         </div>
     </div>
     <script>
-        function month() {
+       function month() {
     var date = new Date()
     var monthnum = date.getMonth()
    var monthname = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]
@@ -161,3 +166,8 @@ setInterval(millisecond,1)
     </script>
 </body>
 </html>
+    
+
+
+
+ 
