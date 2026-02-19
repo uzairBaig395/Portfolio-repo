@@ -151,7 +151,7 @@ function submit() {
     let nameinp = document.getElementById("name").value;
     let ageinp = document.getElementById("age").value;
     let cityinp = document.getElementById("city").value;
-    let courseinp = document.getElementById("course").value;
+   let courseinp = document.getElementById("course").value.toLowerCase().trim();
     let data = {
         name:nameinp,
         age:ageinp,
