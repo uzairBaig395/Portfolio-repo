@@ -103,7 +103,17 @@ divelm.className = "divelm";
 let deletingtodos = document.createElement("button")
 deletingtodos.innerText = "Delete"
 deletingtodos.onclick = function () {
+    if(todosobj.iscompleted === true) {
+        alert("first remove done")
+        return ;
+    }
     divelm.remove()
+    for(let i=0; i < todos.length; i++) {
+        if(todos[i].id == todosobj.id) {
+            todos.splice(i,1)
+        }
+        break;
+    }
 }
 divelm.appendChild(pelm)
 divelm.appendChild(deletingtodos)
@@ -135,16 +145,16 @@ donebtn.onclick = function () {
     divelm.style.color = "green"
     todosobj.iscompleted = true
     donebtn.style.display = "none"
-    //working on reset button
-    reset.style.display = "inline"
-    reset.innerText = "Reset"
-    divelm.appendChild(reset)
-    reset.onclick = function () {
-           divelm.style.color = "black"
-           todosobj.iscompleted = false
-           donebtn.style.display = "inline"
-           reset.style.display = "none"
-    }
+  //working on reset button
+  let reset = document.createElement("button")
+reset.innerText = "Reset"
+divelm.appendChild(reset)
+reset.onclick = function () {
+    divelm.style.color = "black"
+    todosobj.iscompleted = false
+    reset.style.display = "none"
+    donebtn.style.display = "inline"
+}
 }
 
 
