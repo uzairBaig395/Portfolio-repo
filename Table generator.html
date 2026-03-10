@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: #f4f6f9;
+            padding:20px;
+        }
+
+        /* main card container */
+        .wrapper{
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.08);
+            width:100%;
+            max-width:420px;
+            text-align:center;
+        }
+
+        h1{
+            font-size:22px;
+            color:#111827;
+            margin-bottom:20px;
+        }
+
+        /* input and button container */
+        .controls{
+            display:flex;
+            gap:10px;
+            margin-bottom:20px;
+        }
+
+        input{
+            flex:1;
+            padding:12px 14px;
+            border:1px solid #dcdfe4;
+            border-radius:6px;
+            font-size:15px;
+            outline:none;
+            transition:0.2s;
+        }
+
+        input:focus{
+            border-color:#2563eb;
+            box-shadow:0 0 0 2px rgba(37,99,235,0.15);
+        }
+
+        button{
+            padding:12px 18px;
+            border:none;
+            border-radius:6px;
+            background:#2563eb;
+            color:white;
+            font-size:15px;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        #main{
+            margin-top:10px;
+        }
+
+        #main p{
+            padding:10px;
+            border-bottom:1px solid #e5e7eb;
+            font-size:16px;
+            color:#1f2937;
+        }
+
+        #main p:last-child{
+            border-bottom:none;
+        }
+
+        /* responsive for mobile */
+        @media (max-width:480px){
+            .controls{
+                flex-direction:column;
+            }
+
+            button{
+                width:100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Multiplication Table Generator</h1>
+        <div class="controls">
+            <input type="text" id="tableinp" placeholder="Enter a number">
+            <button onclick="show()">Show</button>
+        </div>
+        <div id="main"></div>
+    </div>
+
+   <script>
+    let main = document.getElementById("main")
+let tableinp = document.getElementById("tableinp")
+function show() {
+  main.innerText = ""
+  if(tableinp.value === "") {
+     alert("please enter number")
+     return;
+  }
+  else if(isNaN(tableinp.value)) {
+    alert("enter only numbers")
+    return;
+  }
+  for(let i=1; i <= 10; i++) {
+    let pelm = document.createElement("p")
+    main.appendChild(pelm)
+    pelm.innerText = tableinp.value+"x"+i+"="+i*tableinp.value
+  }
+}
+   </script>
+</body>
+</html>
