@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Balance</title>
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        background-color: rgb(238, 235, 235);
+        margin: 0;
+        padding: 0;
+    }
+
+    .main {
+        width: 400px;
+        height: 300px;
+        background-color: white;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 80px;
+    }
+
+    .add, .sub, .total {
+        width: fit-content;
+        height: fit-content;
+        font-size: larger;
+        font-weight: bolder;
+        color: white;
+        border-radius: 20px;
+        margin: 0 15px;
+        padding: 8px 16px;
+    }
+
+    .add { background-color: green; }
+    .sub { background-color: red; }
+    .total { background-color: brown; }
+
+    #balance {
+        width: 90%;
+        font-size: larger;
+        font-weight: bolder;
+        margin-bottom: 20px;
+        padding: 8px;
+    }
+
+    .child1 {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* ✅ RESPONSIVE PART ONLY */
+    @media (max-width: 500px) {
+        .main {
+            width: 90%;
+            height: auto;
+            padding: 20px 10px;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        #show {
+            font-size: 26px;
+        }
+
+        #balance {
+            width: 100%;
+        }
+
+        .child1 {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add, .sub, .total {
+            width: 80%;
+            text-align: center;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+    <h1>Bank Balance</h1>
+    <h1 id="show">-</h1>
+
+    <input type="number" id="balance" placeholder="enter balance">
+
+    <div class="child1">
+        <button class="add" onclick="add()">Add</button>
+        <button class="sub" onclick="sub()">Subtract</button>
+        <button class="total" onclick="total()">Total</button>
+    </div>
+</div>
+
+<script>
+    let Total = 5000;
+let balanceinp = document.getElementById("balance");
+let show = document.getElementById("show");
+//working on add
+function add() {
+    if(balanceinp.value < 500) {
+        alert("add minimum 500")
+        return;
+    }
+    Total += Number(balanceinp.value);
+    alert("your amount is successfully added")
+    balanceinp.value = "";
+    }
+//working on subtract
+function sub() {
+    if(balanceinp.value < 500) {
+        alert("subtract minimum 500")
+        return;
+    }
+    else if(balanceinp.value > Total) {
+        alert("This amount of money does not exist in your account")
+        return;
+    }
+    Total -= balanceinp.value;
+    alert("your amount is successfully subtracted")
+    balanceinp.value = "";
+}
+//working on total
+function total() {
+    show.innerText = Total;
+}
+</script>
+
+</body>
+</html>
