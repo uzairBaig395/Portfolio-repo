@@ -103,6 +103,71 @@
             background-color: gray;
             margin-left: 10px;
          }
+
+         /* ===== Responsive Design ===== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    nav {
+        font-size: 50px;
+        height: 120px;
+    }
+
+    #main {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+        padding: 60px;
+    }
+
+    #todoinp {
+        width: 180px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    nav {
+        font-size: 30px;
+        height: 100px;
+        text-align: center;
+    }
+
+    #main {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 30px;
+    }
+
+    #child1 {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #todoinp {
+        width: 100%;
+    }
+
+    #addbtn,
+    #updatebtn {
+        width: 100%;
+    }
+
+    .box {
+        width: 100%;
+        text-align: center;
+    }
+
+    .deletebtn,
+    .changebtn,
+    .donebtn,
+    .notdonebtn {
+        margin-top: 10px;
+        display: block;
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
