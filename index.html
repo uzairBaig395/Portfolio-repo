@@ -32,7 +32,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body { background: #060910; overflow-x: hidden; }
+    html { overflow-x: hidden; max-width: 100%; }
+    body { background: #060910; overflow-x: hidden; max-width: 100%; position: relative; }
     h1,h2,h3,.font-display { font-family: 'Syne', sans-serif; }
 
     .glass-card {
@@ -108,39 +109,86 @@
     #toastNotification { transition: transform 0.4s ease, opacity 0.4s ease; }
     #projectModal { animation: fadeIn 0.25s forwards; }
 
+    /* ── CRITICAL: Prevent ANY horizontal overflow ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    section, header, footer, div[id] { max-width: 100%; }
+
+    /* Constrain ambient blobs so they never push layout width */
+    .ambient-blob { max-width: 60vw; max-height: 60vw; }
+
     /* ── Mobile fixes ── */
     @media (max-width: 640px) {
-      .ambient-blob { opacity: 0.07; }
+      .ambient-blob { opacity: 0.06; max-width: 280px; max-height: 280px; }
+
+      /* Hero: force single column properly */
+      #home .grid { display: flex !important; flex-direction: column !important; }
+      #home .lg\\:col-span-7,
+      #home .lg\\:col-span-5 { width: 100% !important; max-width: 100% !important; }
 
       /* Hero code card: shrink on small screens */
       #home .lg\\:col-span-5 .max-w-\\[400px\\] { max-width: 100% !important; }
-      #home .lg\\:col-span-5 { margin-top: 2rem; }
+      #home .lg\\:col-span-5 { margin-top: 1.5rem; }
 
       /* Floating astronaut badge — keep inside viewport */
       #home .absolute.-bottom-6 {
-        bottom: -1rem !important;
+        bottom: -0.5rem !important;
         left: 0.5rem !important;
         right: auto;
+        max-width: calc(100vw - 2rem);
       }
 
-      /* Prevent wide text overflow */
+      /* Prevent wide text overflow everywhere */
+      h1, h2, h3, h4, p, span { word-break: break-word; overflow-wrap: break-word; }
       .font-display { word-break: break-word; }
 
-      /* Portfolio filter buttons wrap nicely */
-      #portfolioFilters { gap: 0.5rem; }
-      #portfolioFilters button { font-size: 0.65rem; padding: 0.4rem 0.75rem; }
+      /* Code blocks inside hero don't expand beyond screen */
+      pre, code { white-space: pre-wrap !important; word-break: break-all !important; max-width: 100% !important; overflow-x: hidden !important; }
 
-      /* Contact social links full-width on mobile */
+      /* Marquee: clip to viewport */
+      .animate-marquee { font-size: 0.75rem !important; }
+      [class*="marquee"] { overflow: hidden; max-width: 100vw; }
+
+      /* Portfolio filter buttons wrap nicely */
+      #portfolioFilters { gap: 0.4rem; flex-wrap: wrap; }
+      #portfolioFilters button { font-size: 0.6rem; padding: 0.35rem 0.6rem; white-space: nowrap; }
+
+      /* Contact social links */
       #contact .lg\\:col-span-5 a { padding: 0.875rem 1rem; }
 
       /* Toast stays in viewport */
-      #toastNotification { right: 0.75rem; left: 0.75rem; max-width: calc(100vw - 1.5rem); }
+      #toastNotification { right: 0.75rem !important; left: 0.75rem !important; max-width: calc(100vw - 1.5rem) !important; }
 
-      /* Modal padding tighter on small screens */
-      #projectModal > div { margin: 0.5rem; border-radius: 1.25rem; }
+      /* Modal full-width on small screens */
+      #projectModal > div { margin: 0.5rem !important; border-radius: 1.25rem; max-width: calc(100vw - 1rem) !important; }
+      #projectModal { padding: 0 !important; align-items: flex-end; }
 
-      /* Marquee font size */
-      .animate-marquee { font-size: 0.85rem !important; }
+      /* Skills grid */
+      #skills .grid { gap: 0.75rem; }
+
+      /* About section image */
+      #about img { max-width: 200px; margin: 0 auto; }
+
+      /* Space section cards single column */
+      #space .grid { gap: 1rem; }
+      #space .sm\\:grid-cols-2 { grid-template-columns: 1fr !important; }
+      #space .sm\\:grid-cols-3 { grid-template-columns: 1fr !important; }
+
+      /* Progress bars label text wrap */
+      #spaceProgressBars .flex.justify-between span:first-child {
+        max-width: 70%;
+        white-space: normal;
+        line-height: 1.3;
+      }
+
+      /* Wormhole banner emoji don't overflow */
+      #space .absolute { max-width: 40vw !important; font-size: 6rem !important; }
+    }
+
+    @media (max-width: 380px) {
+      /* Very small phones */
+      .ambient-blob { display: none; }
+      #home .text-5xl, #home .text-6xl, #home .text-7xl { font-size: 2rem !important; line-height: 1.2 !important; }
+      #portfolioFilters button { font-size: 0.55rem; padding: 0.3rem 0.5rem; }
     }
 
     /* ── Space Science Section ── */
@@ -205,10 +253,11 @@
 </head>
 <body class="text-slate-100 antialiased selection:bg-sky selection:text-obsidian">
 
-  <div class="ambient-blob bg-sky w-[400px] h-[400px] top-[-80px] left-[-60px]"></div>
-  <div class="ambient-blob bg-violet w-[500px] h-[500px] top-[900px] right-[-100px]"></div>
-  <div class="ambient-blob bg-cyan-500 w-[400px] h-[400px] bottom-[1400px] left-[-150px]"></div>
-  <div class="ambient-blob bg-indigo-600 w-[380px] h-[380px] bottom-[300px] right-[-60px]"></div>
+  <div style="overflow-x:hidden;max-width:100vw;position:relative">
+  <div class="ambient-blob bg-sky w-[320px] h-[320px] top-[-80px] left-[-80px]" style="pointer-events:none"></div>
+  <div class="ambient-blob bg-violet w-[400px] h-[400px] top-[900px] right-[-120px]" style="pointer-events:none"></div>
+  <div class="ambient-blob bg-cyan-500 w-[320px] h-[320px] bottom-[1400px] left-[-120px]" style="pointer-events:none"></div>
+  <div class="ambient-blob bg-indigo-600 w-[300px] h-[300px] bottom-[300px] right-[-80px]" style="pointer-events:none"></div>
 
   <header class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5 transition-all duration-300" id="mainHeader">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -310,9 +359,9 @@
           </div>
         </div>
 
-        <div class="lg:col-span-5 relative flex items-center justify-center pb-10 sm:pb-0">
-          <div class="relative w-full max-w-[400px] aspect-square rounded-3xl bg-gradient-to-tr from-violet/30 via-midnight to-sky/30 p-[1.5px] shadow-2xl">
-            <div class="w-full h-full bg-midnight rounded-[22px] overflow-hidden p-6 sm:p-8 flex flex-col justify-between relative">
+        <div class="lg:col-span-5 relative flex items-center justify-center pb-12 sm:pb-0 w-full overflow-hidden">
+          <div class="relative w-full max-w-[340px] sm:max-w-[400px] aspect-square rounded-3xl bg-gradient-to-tr from-violet/30 via-midnight to-sky/30 p-[1.5px] shadow-2xl mx-auto">
+            <div class="w-full h-full bg-midnight rounded-[22px] overflow-hidden p-4 sm:p-8 flex flex-col justify-between relative">
               <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center space-x-2">
                   <div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -321,17 +370,17 @@
                 </div>
                 <span class="text-[11px] font-mono text-slate-500">uzair &bull; profile.js</span>
               </div>
-              <div class="flex-grow flex flex-col justify-center space-y-3 font-mono text-xs sm:text-sm text-slate-300 py-6 overflow-hidden">
+              <div class="flex-grow flex flex-col justify-center space-y-3 font-mono text-[11px] sm:text-sm text-slate-300 py-4 sm:py-6 overflow-hidden">
                 <p class="text-slate-500"><span class="text-violet">const</span> developer = {</p>
-                <p class="pl-4"><span class="text-sky">name</span>: <span class="text-amber-300">"Mirza Uzair Baig"</span>,</p>
-                <p class="pl-4"><span class="text-sky">passion</span>: <span class="text-amber-300">"Space_Science_Tech"</span>,</p>
-                <p class="pl-4"><span class="text-sky">skills</span>: [<br>
-                  <span class="pl-4 text-purple-400">"JavaScript"</span>, <br>
-                  <span class="pl-4 text-purple-400">"Firebase"</span>, <br>
-                  <span class="pl-4 text-purple-400">"Astrodynamics_Research"</span><br>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">name</span>: <span class="text-amber-300 break-all">"Mirza Uzair Baig"</span>,</p>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">passion</span>: <span class="text-amber-300 break-all">"Space_Science_Tech"</span>,</p>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">skills</span>: [<br>
+                  <span class="pl-3 sm:pl-4 text-purple-400">"JavaScript"</span>, <br>
+                  <span class="pl-3 sm:pl-4 text-purple-400">"Firebase"</span>, <br>
+                  <span class="pl-3 sm:pl-4 text-purple-400 break-all">"Astrodynamics"</span><br>
                 ],</p>
-                <p class="pl-4"><span class="text-sky">origin</span>: <span class="text-amber-300">"Karachi, PK"</span>,</p>
-                <p class="pl-4"><span class="text-sky">status</span>: <span class="text-emerald-400">"Continuously_Exploring"</span></p>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">origin</span>: <span class="text-amber-300">"Karachi, PK"</span>,</p>
+                <p class="pl-3 sm:pl-4"><span class="text-sky">status</span>: <span class="text-emerald-400 break-all">"Continuously_Exploring"</span></p>
                 <p class="text-slate-500">};</p>
               </div>
               <div class="border-t border-slate-800 pt-4 flex items-center justify-between text-slate-500 text-[10px] font-mono">
@@ -340,13 +389,13 @@
               </div>
             </div>
           </div>
-          <div class="absolute -bottom-6 left-2 sm:-left-10 glass-card rounded-2xl p-3.5 flex items-center space-x-3 shadow-xl border border-slate-800 z-10" style="animation: floatAvatar 6s ease-in-out infinite;">
-            <div class="w-10 h-10 rounded-xl bg-sky/10 flex items-center justify-center text-sky text-lg">
+          <div class="absolute bottom-0 left-2 sm:-left-10 glass-card rounded-2xl p-3 sm:p-3.5 flex items-center space-x-2 sm:space-x-3 shadow-xl border border-slate-800 z-10 max-w-[calc(100%-1rem)]" style="animation: floatAvatar 6s ease-in-out infinite;">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-sky/10 flex items-center justify-center text-sky text-base sm:text-lg shrink-0">
               <i class="fa-solid fa-user-astronaut"></i>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[10px] text-slate-400 font-mono uppercase tracking-wider">Deep Learning</span>
-              <span class="text-sm font-bold text-white font-display">Space & Tech Genius</span>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[9px] sm:text-[10px] text-slate-400 font-mono uppercase tracking-wider">Deep Learning</span>
+              <span class="text-xs sm:text-sm font-bold text-white font-display truncate">Space & Tech Genius</span>
             </div>
           </div>
         </div>
@@ -355,7 +404,7 @@
     </div>
   </section>
 
-  <div class="w-full bg-slate-900/40 border-y border-slate-900 py-5 overflow-hidden">
+  <div class="w-full bg-slate-900/40 border-y border-slate-900 py-5 overflow-hidden" style="max-width:100vw">
     <div class="animate-marquee whitespace-nowrap text-slate-300 font-display text-lg font-bold uppercase tracking-wider flex items-center space-x-10">
       <span>⚡ SPACE SCIENCE TECHNOLOGY</span> <span class="text-sky">&bull;</span>
       <span>⚡ FIREBASE & FIRESTORE</span> <span class="text-sky">&bull;</span>
@@ -1444,5 +1493,6 @@
       }
     });
   </script>
+  </div><!-- /root overflow wrapper -->
 </body>
 </html>
