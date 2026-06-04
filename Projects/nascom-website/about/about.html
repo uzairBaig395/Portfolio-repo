@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASCOM | CCTV & Intercom Solutions</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <style>
+        /* ================= GLOBAL ================= */
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        html{
+            scroll-behavior:smooth;
+        }
+
+        /* ================= THEME VARIABLES ================= */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #141414;
+            --bg-nav: rgba(0, 0, 0, 0.9);
+            --bg-nav-scrolled: #000000;
+            --border-nav: #1c1c1c;
+            --border-nav-scrolled: #252525;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #a6a6a6;
+            --text-subtle: #666666;
+            --logo-color: #ffffff;
+            --btn-bg: #ffffff;
+            --btn-color: #000000;
+            --btn-border: #ffffff;
+            --btn-hover-color: #ffffff;
+            --btn2-border: #444444;
+            --btn2-color: #ffffff;
+            --btn2-hover-bg: #ffffff;
+            --btn2-hover-color: #000000;
+            --underline-color: #ffffff;
+            --about-section-bg: #000000;
+            --about-img-border: #1c1c1c;
+            --about-img-hover-border: #ffffff;
+            --about-content-color: #b3b3b3;
+            --services-bg: #141414;
+            --service-box-bg: #000000;
+            --service-box-border: #222222;
+            --service-box-hover-border: #ffffff;
+            --service-icon-color: #ffffff;
+            --service-icon-hover-color: #b3b3b3;
+            --service-text-color: #ffffff;
+            --service-p-color: #a6a6a6;
+            --process-bg: #000000;
+            --process-box-bg: #141414;
+            --process-box-border: #222222;
+            --process-box-hover-border: #ffffff;
+            --process-box-hover-bg: #191919;
+            --process-span-border: #333333;
+            --process-span-color: #ffffff;
+            --process-span-hover-bg: #ffffff;
+            --process-span-hover-color: #000000;
+            --process-h3-color: #ffffff;
+            --process-p-color: #a6a6a6;
+            --footer-bg: #000000;
+            --footer-color: #444444;
+            --footer-border: #141414;
+            --section-title-color: #ffffff;
+            --section-title-p-color: #666666;
+        }
+
+        body.light-theme {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #e6ecf2;
+            --bg-nav: rgba(255, 255, 255, 0.92);
+            --bg-nav-scrolled: #ffffff;
+            --border-nav: #ccd8e8;
+            --border-nav-scrolled: #ccd8e8;
+            --text-primary: #0a1a2e;
+            --text-secondary: #2c5282;
+            --text-muted: #3a6496;
+            --text-subtle: #4a6fa5;
+            --logo-color: #0050a0;
+            --btn-bg: #0050a0;
+            --btn-color: #ffffff;
+            --btn-border: #0050a0;
+            --btn-hover-color: #0050a0;
+            --btn2-border: #0050a0;
+            --btn2-color: #0050a0;
+            --btn2-hover-bg: #0050a0;
+            --btn2-hover-color: #ffffff;
+            --underline-color: #0050a0;
+            --about-section-bg: #f0f4f8;
+            --about-img-border: #ccd8e8;
+            --about-img-hover-border: #0050a0;
+            --about-content-color: #3a6496;
+            --services-bg: #e6ecf2;
+            --service-box-bg: #ffffff;
+            --service-box-border: #ccd8e8;
+            --service-box-hover-border: #0050a0;
+            --service-icon-color: #0050a0;
+            --service-icon-hover-color: #2c5282;
+            --service-text-color: #0a1a2e;
+            --service-p-color: #3a6496;
+            --process-bg: #f0f4f8;
+            --process-box-bg: #ffffff;
+            --process-box-border: #ccd8e8;
+            --process-box-hover-border: #0050a0;
+            --process-box-hover-bg: #e8f0fa;
+            --process-span-border: #0050a0;
+            --process-span-color: #0050a0;
+            --process-span-hover-bg: #0050a0;
+            --process-span-hover-color: #ffffff;
+            --process-h3-color: #0a1a2e;
+            --process-p-color: #3a6496;
+            --footer-bg: #0a1a2e;
+            --footer-color: #8aafd4;
+            --footer-border: #1a3050;
+            --section-title-color: #0a1a2e;
+            --section-title-p-color: #4a6fa5;
+        }
+
+        body{
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x:hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ================= THEME TOGGLE BUTTON ================= */
+        .theme-toggle-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: 1.5px solid var(--text-secondary);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .theme-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--bg-nav-scrolled);
+            border: 1px solid var(--border-nav-scrolled);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            min-width: 150px;
+            z-index: 2000;
+        }
+
+        .theme-toggle-wrapper:hover .theme-dropdown,
+        .theme-toggle-wrapper:focus-within .theme-dropdown {
+            display: block;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: background 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .theme-option:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .theme-option.active {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .theme-option .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-dark { background: #444; border: 1.5px solid #888; }
+        .dot-light { background: #0050a0; border: 1.5px solid #0050a0; }
+
+        /* ================= ANIMATION CORE SETUP ================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Delay Utilities */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtlePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* ================= NAVBAR ================= */
+        nav{
+            width:100%;
+            padding:18px 8%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:1000;
+            background: var(--bg-nav);
+            backdrop-filter:blur(10px);
+            border-bottom: 1px solid var(--border-nav);
+            transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            gap: 12px;
+        }
+
+        nav.sticky{
+            background: var(--bg-nav-scrolled);
+            padding:12px 8%;
+            box-shadow:0 4px 25px rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--border-nav-scrolled);
+        }
+
+        .logo{
+            font-size:36px;
+            font-weight:800;
+            color: var(--logo-color);
+            letter-spacing:2px;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.4s ease;
+        }
+
+        nav ul{
+            display:flex;
+            list-style:none;
+            gap:35px;
+            align-items: center;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        nav ul li a{
+            text-decoration:none;
+            color: var(--text-secondary);
+            font-size:16px;
+            font-weight:500;
+            position: relative;
+            padding: 5px 0;
+            transition: 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active{
+            color: var(--text-primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--underline-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
+
+        /* ================= HERO ================= */
+        .hero{
+            width:100%;
+            min-height:100vh;
+            background: 
+            linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85)), 
+            url('https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1600&auto=format&fit=crop');
+            background-size:cover;
+            background-position:center;
+            background-repeat:no-repeat;
+            display:flex;
+            align-items:center;
+            padding:0 8%;
+        }
+
+        .hero-content{
+            max-width:800px;
+        }
+
+        .hero-content h3{
+            color:#ffffff;
+            font-size:22px;
+            margin-bottom:20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero-content h1{
+            font-size:75px;
+            line-height:90px;
+            margin-bottom:25px;
+            font-weight:800;
+            color: #ffffff;
+            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-content p{
+            color:#cccccc;
+            font-size:18px;
+            line-height:34px;
+            margin-bottom:40px;
+            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons{
+            display:flex;
+            gap:20px;
+            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.6s forwards;
+            opacity: 0;
+        }
+
+        /* ================= BUTTONS ================= */
+        .btn{
+            padding:15px 38px;
+            background: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            border-radius:4px;
+            text-decoration:none;
+            color: var(--btn-color);
+            font-weight:600;
+            transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover{
+            transform: translateY(-4px);
+            background: transparent;
+            color: var(--btn-hover-color);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .btn2{
+            background:transparent;
+            border: 2px solid var(--btn2-border);
+            color: var(--btn2-color);
+        }
+
+        .btn2:hover {
+            background: var(--btn2-hover-bg);
+            border-color: var(--btn2-hover-bg);
+            color: var(--btn2-hover-color);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(3px);
+        }
+
+        /* ================= SECTION TITLE ================= */
+        .section-title{
+            text-align:center;
+            margin-bottom:70px;
+        }
+
+        .section-title h2{
+            font-size:50px;
+            margin-bottom:15px;
+            font-weight: 700;
+            color: var(--section-title-color);
+        }
+
+        .section-title p{
+            color: var(--section-title-p-color);
+            font-size:18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ================= MAIN HOME WORK/ABOUT AREA ================= */
+        .about-section{
+            padding:120px 8%;
+            background: var(--about-section-bg);
+            transition: background 0.4s ease;
+        }
+
+        .about-container{
+            display:flex;
+            align-items:center;
+            gap:60px;
+            flex-wrap:wrap;
+        }
+
+        .about-image{
+            flex:1;
+            min-width: 300px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .about-image img{
+            width:100%;
+            border-radius:4px;
+            border: 1px solid var(--about-img-border);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease;
+        }
+
+        .about-image:hover img {
+            border-color: var(--about-img-hover-border);
+            transform: scale(1.03);
+        }
+
+        .about-content{
+            flex:1;
+            min-width: 300px;
+        }
+
+        .about-content h3{
+            font-size:45px;
+            margin-bottom:25px;
+            color: var(--text-primary);
+        }
+
+        .about-content p{
+            color: var(--about-content-color);
+            line-height:34px;
+            margin-bottom:25px;
+            font-size:17px;
+        }
+
+        /* ================= SERVICES ================= */
+        .services{
+            padding:120px 8%;
+            background: var(--services-bg);
+            transition: background 0.4s ease;
+        }
+
+        .services-container{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:30px;
+        }
+
+        .service-box{
+            background: var(--service-box-bg);
+            padding:35px;
+            border-radius:4px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 1px solid var(--service-box-border);
+            overflow: hidden;
+        }
+
+        .service-box:hover{
+            transform:translateY(-12px);
+            border-color: var(--service-box-hover-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .service-img-wrapper {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 2px;
+            margin-bottom: 25px;
+        }
+
+        .service-box img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-box:hover img {
+            transform: scale(1.06);
+        }
+
+        .service-box i{
+            font-size:36px;
+            color: var(--service-icon-color);
+            margin-bottom:20px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: inline-block;
+        }
+
+        .service-box:hover i {
+            transform: scale(1.15);
+            color: var(--service-icon-hover-color);
+        }
+
+        .service-box h3{
+            font-size:24px;
+            margin-bottom:15px;
+            color: var(--service-text-color);
+        }
+
+        .service-box p{
+            color: var(--service-p-color);
+            line-height:28px;
+        }
+
+        /* ================= PROCESS ================= */
+        .process{
+            padding:120px 8%;
+            background: var(--process-bg);
+            transition: background 0.4s ease;
+        }
+
+        .process-container{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:30px;
+        }
+
+        .process-box{
+            background: var(--process-box-bg);
+            padding:40px;
+            border-radius:4px;
+            text-align:center;
+            border: 1px solid var(--process-box-border);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .process-box:hover{
+            border-color: var(--process-box-hover-border);
+            transform: translateY(-5px);
+            background: var(--process-box-hover-bg);
+        }
+
+        .process-box span{
+            width:70px;
+            height:70px;
+            background:transparent;
+            border: 2px solid var(--process-span-border);
+            color: var(--process-span-color);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin:auto;
+            border-radius:50%;
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:25px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .process-box:hover span {
+            border-color: var(--process-span-hover-bg);
+            background: var(--process-span-hover-bg);
+            color: var(--process-span-hover-color);
+            transform: rotate(360deg);
+        }
+
+        .process-box h3{
+            margin-bottom:20px;
+            font-size:22px;
+            color: var(--process-h3-color);
+        }
+
+        .process-box p{
+            color: var(--process-p-color);
+            line-height:28px;
+        }
+
+        /* ================= FOOTER ================= */
+        footer{
+            background: var(--footer-bg);
+            padding:35px;
+            text-align:center;
+            color: var(--footer-color);
+            border-top: 1px solid var(--footer-border);
+            font-size: 14px;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        footer p {
+            color: var(--footer-color);
+        }
+
+        /* ================= WHATSAPP ================= */
+        .whatsapp{
+            position:fixed;
+            bottom:25px;
+            right:25px;
+            width:60px;
+            height:60px;
+            background:#25d366;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            border-radius:50%;
+            font-size:30px;
+            color:#ffffff;
+            text-decoration:none;
+            z-index:999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            transition: 0.3s ease;
+            animation: subtlePulse 2s infinite ease-in-out;
+        }
+
+        .whatsapp:hover {
+            transform: scale(1.1);
+            animation-play-state: paused;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media(max-width:991px){
+            nav{
+                flex-direction:column;
+                gap:10px;
+                padding: 15px 8%;
+            }
+            nav.sticky {
+                padding: 12px 8%;
+            }
+            .logo{
+                font-size: 28px;
+            }
+            .hero{
+                padding-top: 140px;
+                align-items: flex-start;
+            }
+            .hero-content h1{
+                font-size:50px;
+                line-height:65px;
+            }
+            .hero-buttons{
+                flex-direction:column;
+            }
+            .section-title h2{
+                font-size:38px;
+            }
+        }
+
+        @media(max-width:600px){
+            nav{
+                padding: 12px 4%;
+            }
+            nav ul{
+                gap:10px 15px;
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+            nav ul li a{
+                font-size: 14px;
+            }
+            .hero{
+                padding-top: 160px;
+            }
+            .hero-content h1{
+                font-size:34px;
+                line-height:46px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NASCOM</div>
+
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="./about.html" class="active">About</a></li>
+            <li><a href="./about.html#services">Services</a></li>
+            <li><a href="./about.html#process">Process</a></li>
+            <li><a href="../contact/Contact.html">Contact Us</a></li>
+        </ul>
+
+        <div class="theme-toggle-wrapper" tabindex="0">
+            <button class="theme-btn" id="themeBtn" aria-label="Change theme">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+            </button>
+            <div class="theme-dropdown">
+                <button class="theme-option active" id="optDark" onclick="setTheme('dark')">
+                    <span class="dot dot-dark"></span> Dark Theme
+                </button>
+                <button class="theme-option" id="optLight" onclick="setTheme('light')">
+                    <span class="dot dot-light"></span> Light Theme
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h3>Discover Our Legacy</h3>
+            <h1>Engineered For Complete Peace Of Mind</h1>
+            <p>
+                Get to know the team behind Karachi's premier elite security deployments. From residential estates to multi-floor office corporate builds, we combine decades of deep technical field excellence with unmatched client protection standards.
+            </p>
+            <div class="hero-buttons">
+                <!-- <a href="contact.html" class="btn"><i class="fa-solid fa-headset"></i> Get Free Consultation</a> -->
+                <a href="../contact/Contact.html" class="btn btn2"><i class="fa-solid fa-map-location-dot"></i> View Our Offices</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="section-title reveal">
+            <h2>Our Operational Philosophy</h2>
+            <p>Setting the Benchmarks in Modern Surveillance</p>
+        </div>
+
+        <div class="about-container">
+            <div class="about-image reveal-left">
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1400&auto=format&fit=crop" alt="Security Infrastructure">
+            </div>
+            <div class="about-content reveal-right">
+                <h3>Decades of Technical Excellence</h3>
+                <p>
+                    NASCOM was built on the core principle of creating uncompromised, ironclad digital environments. Rather than supplying generic hardware off the shelf, we thoroughly evaluate systemic vulnerabilities to formulate intelligent custom defenses that proactively keep risk completely away from your perimeter.
+                </p>
+                <p>
+                    Our highly vetted operational field technicians hold advanced specializations across networking layouts, complex low-voltage electronics, and low-latency digital signal routing. We continuous test setups before handover, guaranteeing system reliability under all conditions.
+                </p>
+                <p>
+                    By centering our logistical response hubs directly out of DHA and Clifton, our clients enjoy unmatched response capabilities alongside rapid emergency technician dispatch turnarounds that are unmatched across the industry.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="section-title reveal">
+            <h2>Our Solutions & Services</h2>
+            <p>Complete Security Solutions For Home & Business</p>
+        </div>
+
+        <div class="services-container">
+            <div class="service-box reveal delay-1">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200&auto=format&fit=crop" alt="CCTV Camera systems">
+                </div>
+                <i class="fa-solid fa-video"></i>
+                <h3>CCTV Camera Systems</h3>
+                <p>Professional wired & wireless CCTV camera systems with complete installation and support services.</p>
+            </div>
+
+            <div class="service-box reveal delay-2">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=1200&auto=format&fit=crop" alt="Intercom networks">
+                </div>
+                <i class="fa-solid fa-building"></i>
+                <h3>IP PABX & Intercom</h3>
+                <p>Modern IP PABX and smart audio video intercom systems for homes and offices.</p>
+            </div>
+
+            <div class="service-box reveal delay-3">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=1200&auto=format&fit=crop" alt="Access checks">
+                </div>
+                <i class="fa-solid fa-door-open"></i>
+                <h3>Access Control Systems</h3>
+                <p>Secure electric door access control systems and smart security solutions.</p>
+            </div>
+
+            <div class="service-box reveal delay-1">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Network architecture">
+                </div>
+                <i class="fa-solid fa-network-wired"></i>
+                <h3>LAN & WAN Infrastructure</h3>
+                <p>Professional network infrastructure design and installation services.</p>
+            </div>
+
+            <div class="service-box reveal delay-2">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Fire detectors">
+                </div>
+                <i class="fa-solid fa-fire"></i>
+                <h3>Fire Alarm Systems</h3>
+                <p>Advanced fire alarm and smoke detection systems for complete building safety.</p>
+            </div>
+
+            <div class="service-box reveal delay-3">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Maintenance desk">
+                </div>
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Maintenance & Support</h3>
+                <p>Technical support, maintenance, and repair services with fast response times.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="process" id="process">
+        <div class="section-title reveal">
+            <h2>How Our Process Works</h2>
+            <p>Simple Professional Installation Process</p>
+        </div>
+
+        <div class="process-container">
+            <div class="process-box reveal delay-1">
+                <span>1</span>
+                <h3>Discuss Requirements</h3>
+                <p>Share your CCTV or intercom requirements with our expert technical team.</p>
+            </div>
+
+            <div class="process-box reveal delay-2">
+                <span>2</span>
+                <h3>Schedule Site Survey</h3>
+                <p>Our consultant visits your site for inspection and guidance.</p>
+            </div>
+
+            <div class="process-box reveal delay-3">
+                <span>3</span>
+                <h3>Get Quotation</h3>
+                <p>Receive a detailed project quotation and complete solution plan.</p>
+            </div>
+
+            <div class="process-box reveal delay-1">
+                <span>4</span>
+                <h3>Start Installation</h3>
+                <p>Professional installation work begins after project approval.</p>
+            </div>
+
+            <div class="process-box reveal delay-2">
+                <span>5</span>
+                <h3>Project Execution</h3>
+                <p>On-time project completion with testing and commissioning.</p>
+            </div>
+
+            <div class="process-box reveal delay-3">
+                <span>6</span>
+                <h3>Hands-On Training</h3>
+                <p>Complete guidance and training to operate your system easily.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 NASCOM CCTV & Intercom Solution Provider | All Rights Reserved</p>
+    </footer>
+
+    <a href="https://wa.me/923002369330" target="_blank" class="whatsapp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Theme Toggle
+        function setTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+                document.getElementById('optDark').classList.remove('active');
+                document.getElementById('optLight').classList.add('active');
+                localStorage.setItem('nascom-theme', 'light');
+            } else {
+                document.body.classList.remove('light-theme');
+                document.getElementById('optDark').classList.add('active');
+                document.getElementById('optLight').classList.remove('active');
+                localStorage.setItem('nascom-theme', 'dark');
+            }
+        }
+
+        // Apply saved theme on load
+        (function() {
+            var saved = localStorage.getItem('nascom-theme');
+            if (saved === 'light') setTheme('light');
+        })();
+
+        // Sticky Header Script
+        window.addEventListener("scroll", function(){
+            const nav = document.querySelector("nav");
+            nav.classList.toggle("sticky", window.scrollY > 50);
+        });
+
+        // Intersection Observer for Scroll Animations
+        document.addEventListener("DOMContentLoaded", function() {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(element => {
+                revealObserver.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASCOM | HOME</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <style>
+        /* ================= GLOBAL RESET & VARS ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ================= THEME VARIABLES ================= */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-nav: rgba(0, 0, 0, 0.85);
+            --bg-nav-scrolled: #000000;
+            --border-nav: rgba(255, 255, 255, 0.05);
+            --border-nav-scrolled: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #aaaaaa;
+            --text-subtle: #888888;
+            --text-faint: #666666;
+            --logo-color: #ffffff;
+            --btn-bg: #ffffff;
+            --btn-color: #000000;
+            --btn-border: #ffffff;
+            --btn-hover-color: #ffffff;
+            --nav-call-hover-color: #ffffff;
+            --underline-color: #ffffff;
+            --slider-border: #1a1a1a;
+            --slider-hover-border: rgba(255, 255, 255, 0.3);
+            --brands-bg: #0a0a0a;
+            --brands-border: #141414;
+            --brands-color: #666666;
+            --brands-hover-bg: #ffffff;
+            --brands-hover-color: #000000;
+            --brands-hover-border: #ffffff;
+            --footer-bg: #000000;
+            --footer-color: #666666;
+            --footer-border: #141414;
+            --mobile-nav-bg: #000000;
+            --mobile-nav-border: #141414;
+        }
+
+        body.light-theme {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #e6ecf2;
+            --bg-nav: rgba(255, 255, 255, 0.92);
+            --bg-nav-scrolled: #ffffff;
+            --border-nav: rgba(0, 80, 160, 0.1);
+            --border-nav-scrolled: #ccd8e8;
+            --text-primary: #0a1a2e;
+            --text-secondary: #2c5282;
+            --text-muted: #3a6496;
+            --text-subtle: #4a6fa5;
+            --text-faint: #5a7fa8;
+            --logo-color: #0050a0;
+            --btn-bg: #0050a0;
+            --btn-color: #ffffff;
+            --btn-border: #0050a0;
+            --btn-hover-color: #0050a0;
+            --nav-call-hover-color: #0050a0;
+            --underline-color: #0050a0;
+            --slider-border: #ccd8e8;
+            --slider-hover-border: rgba(0, 80, 160, 0.4);
+            --brands-bg: #ffffff;
+            --brands-border: #ccd8e8;
+            --brands-color: #4a6fa5;
+            --brands-hover-bg: #0050a0;
+            --brands-hover-color: #ffffff;
+            --brands-hover-border: #0050a0;
+            --footer-bg: #0a1a2e;
+            --footer-color: #8aafd4;
+            --footer-border: #1a3050;
+            --mobile-nav-bg: #ffffff;
+            --mobile-nav-border: #ccd8e8;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ================= THEME TOGGLE BUTTON ================= */
+        .theme-toggle-wrapper {
+            position: relative;
+            display: inline-block;
+            order: 3;
+        }
+
+        /* On desktop: hide toggle from nav flow, show it appended inside ul row */
+        @media (min-width: 901px) {
+            .theme-toggle-wrapper {
+                /* sits between ul and right edge isn't possible with space-between
+                   so we push it into the ul visually via nav flex order */
+                order: 2;
+                margin-left: 10px;
+            }
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: 1.5px solid var(--text-secondary);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .theme-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--bg-nav-scrolled);
+            border: 1px solid var(--border-nav-scrolled);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            min-width: 150px;
+            z-index: 2000;
+        }
+
+        .theme-toggle-wrapper:hover .theme-dropdown,
+        .theme-toggle-wrapper:focus-within .theme-dropdown {
+            display: block;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: background 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .theme-option:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .theme-option.active {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .theme-option .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-dark { background: #444; border: 1.5px solid #888; }
+        .dot-light { background: #0050a0; border: 1.5px solid #0050a0; }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ================= NO-JS ANIMATIONS ================= */
+        @keyframes dynamicRevealUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dynamicRevealLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes dynamicRevealRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-reveal-1 { animation: fadeInUp 0.8s ease forwards; }
+        .hero-reveal-2 { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards; opacity: 0; }
+        .hero-reveal-3 { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards; opacity: 0; }
+        .hero-reveal-4 { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.6s forwards; opacity: 0; }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .scroll-reveal {
+                animation: dynamicRevealUp 1s cubic-bezier(0.25, 1, 0.5, 1) both;
+                animation-timeline: view();
+                animation-range: entry 5% cover 25%;
+            }
+            .scroll-reveal-left {
+                animation: dynamicRevealLeft 1s cubic-bezier(0.25, 1, 0.5, 1) both;
+                animation-timeline: view();
+                animation-range: entry 5% cover 25%;
+            }
+            .scroll-reveal-right {
+                animation: dynamicRevealRight 1s cubic-bezier(0.25, 1, 0.5, 1) both;
+                animation-timeline: view();
+                animation-range: entry 5% cover 25%;
+            }
+            .delay-1 { animation-delay: 0.05s; }
+            .delay-2 { animation-delay: 0.1s; }
+            .delay-3 { animation-delay: 0.15s; }
+            .delay-4 { animation-delay: 0.2s; }
+        }
+
+        /* ================= STICKY GLOBAL NAVIGATION ================= */
+        nav {
+            width: 100%;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: var(--bg-nav);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-nav);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            gap: 12px;
+        }
+
+        body:has(#track-scroll) nav {
+            padding: 15px 6%;
+            background: var(--bg-nav-scrolled);
+            border-bottom: 1px solid var(--border-nav-scrolled);
+        }
+
+        .logo {
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 800;
+            color: var(--logo-color);
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: color 0.4s ease;
+        }
+
+        /* Mobile Layout Checkbox Triggers */
+        .menu-toggle {
+            display: none;
+        }
+
+        .menu-btn {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--text-primary);
+            z-index: 1010;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--text-primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--underline-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
+
+        .nav-call-btn {
+            background: var(--btn-bg);
+            color: var(--btn-color);
+            padding: 10px 22px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 2px solid var(--btn-border);
+            white-space: nowrap;
+        }
+
+        .nav-call-btn:hover {
+            background: transparent;
+            color: var(--nav-call-hover-color);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ================= HERO INTRO SECTION ================= */
+        .hero {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)), url('./images/img-6.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            padding: 120px 8% 60px 8%;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .hero-content h3 {
+            color: #ffffff;
+            font-size: clamp(16px, 2.5vw, 22px);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(38px, 6vw, 72px);
+            line-height: 1.15;
+            margin-bottom: 25px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+
+        .hero-content p {
+            color: #cccccc;
+            font-size: clamp(16px, 1.8vw, 18px);
+            line-height: 1.75;
+            margin-bottom: 40px;
+            max-width: 750px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* ================= BUTTON MODULES ================= */
+        .btn {
+            padding: 16px 40px;
+            background: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--btn-color);
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            background: transparent;
+            color: var(--btn-hover-color);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn i { transition: transform 0.3s ease; }
+        .btn:hover i { transform: translateX(6px); }
+
+        /* ================= SECTIONS & UTILITIES ================= */
+        .section-title {
+            text-align: center;
+            margin-bottom: clamp(40px, 8vw, 70px);
+        }
+
+        .section-title h2 {
+            font-size: clamp(30px, 4.5vw, 48px);
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title p {
+            color: var(--text-subtle);
+            font-size: clamp(13px, 1.5vw, 15px);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* ================= SHOWCASE WORKSPACE ================= */
+        .showcase-section {
+            padding: clamp(60px, 10vw, 120px) 6%;
+            background: var(--bg-primary);
+            transition: background 0.4s ease;
+        }
+
+        .showcase-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .showcase-text h3 {
+            font-size: clamp(26px, 3.5vw, 40px);
+            margin-bottom: 20px;
+            line-height: 1.25;
+        }
+
+        .showcase-text p {
+            color: var(--text-muted);
+            line-height: 1.75;
+            font-size: 16px;
+        }
+
+        .showcase-slider-wrapper {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            max-height: 480px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            border: 1px solid var(--slider-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .showcase-slider-wrapper:hover {
+            transform: scale(1.01);
+            border-color: var(--slider-hover-border);
+        }
+
+        .showcase-slider-wrapper .slider-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            animation: cssHorizontalSlider 20s infinite ease-in-out;
+        }
+
+        .showcase-slider-wrapper .slider-img:nth-child(1) { animation-delay: 0s; }
+        .showcase-slider-wrapper .slider-img:nth-child(2) { animation-delay: 4s; }
+        .showcase-slider-wrapper .slider-img:nth-child(3) { animation-delay: 8s; }
+        .showcase-slider-wrapper .slider-img:nth-child(4) { animation-delay: 12s; }
+        .showcase-slider-wrapper .slider-img:nth-child(5) { animation-delay: 16s; }
+
+        @keyframes cssHorizontalSlider {
+            0% { left: 100%; z-index: 1; }
+            4%, 20% { left: 0%; z-index: 2; }
+            24%, 100% { left: -100%; z-index: 1; }
+        }
+
+        /* ================= SERVICES SYSTEM METRICS ================= */
+        .services {
+            padding: clamp(60px, 10vw, 120px) 6%;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.4s ease;
+        }
+        
+        .services-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .services-div-1 {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .services-div-1-box {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1 / 1;
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 6px;
+            border: 1px solid var(--slider-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .services-div-1-box:hover {
+            transform: scale(1.01);
+            border-color: var(--slider-hover-border);
+        }
+
+        .services-images {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+           position: absolute; 
+           top: 0;
+           left: 100%;
+           animation: serviceSlider4Images 16s infinite ease-in-out; 
+        }
+
+        .services-images.service-img-1 { animation-delay: 0s; }
+        .services-images.service-img-2 { animation-delay: 4s; }
+        .services-images.service-img-3 { animation-delay: 8s; }
+        .services-images.service-img-4 { animation-delay: 12s; }
+
+        @keyframes serviceSlider4Images {
+            0% { left: 100%; z-index: 1; }
+            5%, 25% { left: 0%; z-index: 2; }
+            30%, 100% { left: -100%; z-index: 1; }
+        }
+        
+        .services-div-2-h3 {
+            font-size: clamp(26px, 3.5vw, 40px);
+            margin-bottom: 20px;
+        }
+
+        .services-div-2-p-1 {
+            color: var(--text-muted);
+            line-height: 1.75;
+            font-size: 16px;
+        }
+
+        /* ================= ECOSYSTEM TRADING BRANDS ================= */
+        .brands {
+            width: 100%;
+            background: var(--bg-primary);
+            padding: clamp(60px, 10vw, 120px) 6%;
+            transition: background 0.4s ease;
+        }
+        
+        .brands-name {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .brands-name div {
+            background-color: var(--brands-bg);
+            color: var(--brands-color);
+            padding: 35px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+            border: 1px solid var(--brands-border);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: default;
+            letter-spacing: 1px;
+        }
+
+        .brands-name div:hover {
+            color: var(--brands-hover-color);
+            border-color: var(--brands-hover-border);
+            background-color: var(--brands-hover-bg);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,255,255,0.05);
+        }
+
+        /* ================= FOOTER RUNTIME ================= */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-color);
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+            border-top: 1px solid var(--footer-border);
+            width: 100%;
+            letter-spacing: 0.5px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* ================= FLOATING UTILITIES ================= */
+        .whatsapp {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: #25d366;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 28px;
+            color: #ffffff;
+            text-decoration: none;
+            z-index: 999;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+            animation: subtlePulse 2s infinite ease-in-out;
+        }
+
+        .whatsapp:hover {
+            transform: scale(1.08);
+            animation-play-state: paused;
+        }
+
+        /* ================= GLOBAL MEDIA RESPONSIVE PIPELINE ================= */
+        
+        /* Tablet Layout Breakpoint Changes */
+        @media (max-width: 1024px) {
+            nav { padding: 20px 4%; }
+            .showcase-container, .services-main { gap: 40px; }
+        }
+
+        /* Large Mobile & Navigation Transition Matrix Configuration */
+        @media (max-width: 900px) {
+            .menu-btn {
+                display: block; /* Show modern hamburger */
+            }
+
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: var(--mobile-nav-bg);
+                border-left: 1px solid var(--mobile-nav-border);
+                flex-direction: column;
+                justify-content: center;
+                gap: 35px;
+                padding: 40px;
+                transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+                z-index: 1005;
+            }
+
+            /* Pure CSS Switch Drawer Triggering Strategy using Selector Matchers */
+            body:has(.menu-toggle:checked) nav ul {
+                right: 0;
+                box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+            }
+
+            body:has(.menu-toggle:checked) .menu-btn::before {
+                content: "\f00d"; /* Change to FontAwesome Close Cross icon dynamically */
+                font-family: "Font Awesome 6 Free";
+                font-weight: 900;
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: left;
+            }
+
+            nav ul li a {
+                font-size: 18px;
+                display: block;
+                padding: 10px 0;
+            }
+
+            .nav-call-btn {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            /* Structural Sections Grid Flattening Actions */
+            .showcase-container, .services-main {
+                grid-template-columns: 1fr;
+                gap: 45px;
+            }
+
+            .showcase-text, .services-div-2 {
+                text-align: center;
+                order: -1; /* Keep messaging hierarchy reading naturally first when columns stack */
+            }
+
+            .showcase-slider-wrapper, .services-div-1 {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .hero {
+                padding-top: 140px;
+                text-align: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+        }
+
+        /* Compact Smartphone Strict Displays Adjustments */
+        @media (max-width: 480px) {
+            nav { padding: 15px 5%; }
+            .brands-name {
+                grid-template-columns: 1fr 1fr; /* Maintain 2 structured clean columns even on tiny panels */
+                gap: 12px;
+            }
+            .brands-name div {
+                padding: 20px 10px;
+                font-size: 16px;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .whatsapp {
+                bottom: 20px;
+                right: 20px;
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="track-scroll"></div>
+
+    <nav>
+        <div class="logo">NASCOM</div>
+        
+        <input type="checkbox" id="menu-check" class="menu-toggle">
+
+        <div class="theme-toggle-wrapper" tabindex="0">
+            <button class="theme-btn" id="themeBtn" aria-label="Change theme">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+            </button>
+            <div class="theme-dropdown">
+                <button class="theme-option active" id="optDark" onclick="setTheme('dark')">
+                    <span class="dot dot-dark"></span> Dark Theme
+                </button>
+                <button class="theme-option" id="optLight" onclick="setTheme('light')">
+                    <span class="dot dot-light"></span> Light Theme
+                </button>
+            </div>
+        </div>
+
+        <label for="menu-check" class="menu-btn"><i class="fa-solid fa-bars"></i></label>
+        
+        <ul>
+            <li><a href="./index.html" class="active">Home</a></li>
+            <li><a href="./about/about.html">About</a></li>
+            <li><a href="./about/about.html#services">Services</a></li>
+            <li><a href="./about/about.html#process">Process</a></li>
+            <li><a href="./contact/Contact.html">Contact Us</a></li>
+            <li>
+                <a href="tel:+923002369330" class="nav-call-btn">
+                     <i class="fa-solid fa-phone"></i> +92 300 2369330
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h3 class="hero-reveal-1">Welcome to NASCOM</h3>
+            <h1 class="hero-reveal-2">The CCTV & Intercom Solution Provider</h1>
+            <p class="hero-reveal-3">
+                NASCOM The CCTV & Intercom Solution Provider is your trusted local expert in the supply, installation, and maintenance of CCTV, intercom, and security systems, serving valued customers in DHA and Clifton, Karachi. We are dedicated to keeping your home and business safe, secure, and always connected. 
+            </p>
+            <div class="hero-buttons hero-reveal-4">
+                <a href="./contact/Contact.html" class="btn">Explore Our Solutions <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section">
+        <div class="section-title scroll-reveal">
+            <h2>Hardware Architecture</h2>
+            <p>Premium Hardware Portfolio Systems Deployments</p>
+        </div>
+
+        <div class="showcase-container">
+            <div class="showcase-text scroll-reveal-left">
+                <h3>Smart Integrated Hardware Systems</h3>
+                <p>
+                    We are a leading provider of surveillance, communication, and security solutions, offering end-to-end services including project planning, system design, installation, and ongoing support. Our experienced and skilled technicians deliver reliable service with quick response times, ensuring your premises stay protected at all times. At NASCOM, we are committed to providing professional, tailored solutions to meet your unique security needs. Our dedicated DHA office allows us to serve customers efficiently across all phases of Defence Housing Authority (DHA) Karachi. 
+                </p>
+            </div>
+
+            <div class="showcase-slider-wrapper scroll-reveal-right">
+                <img class="slider-img" src="./images/img-1.png" alt="CCTV System Tier 1">
+                <img class="slider-img" src="./images/img-2.png" alt="CCTV System Tier 2">
+                <img class="slider-img" src="./images/img-3.png" alt="Intercom Framework 1">
+                <img class="slider-img" src="./images/img-4.png" alt="Intercom Framework 2">
+                <img class="slider-img" src="./images/img-5.png" alt="Central Command Infrastructure">
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+       <div class="section-title scroll-reveal">
+         <h2>About NASCOM</h2>
+         <p>Professional Surveillance & Security Solutions</p>
+       </div>
+       
+       <div class="services-main">
+           <div class="services-div-1 scroll-reveal-left">
+               <div class="services-div-1-box">
+                    <img class="services-images service-img-1" src="./images/img-7.png" alt="Service 1">
+                    <img class="services-images service-img-2" src="./images/img-8.png" alt="Service 2">
+                    <img class="services-images service-img-3" src="./images/img-9.png" alt="Service 3">
+                    <img class="services-images service-img-4" src="./images/img-10.png" alt="Service 4">
+               </div>
+           </div>
+           
+           <div class="services-div-2 scroll-reveal-right">
+                <h3 class="services-div-2-h3">OUR WORK</h3>
+                <p class="services-div-2-p-1">
+                    We are a leading provider of surveillance, communication, and security solutions, offering end-to-end services including project planning, system design, installation, and ongoing support. Our experienced and skilled technicians deliver reliable service with quick response times, ensuring your premises stay protected at all times. At NASCOM, we are committed to providing professional, tailored solutions to meet your unique security needs. Our dedicated DHA office allows us to serve customers efficiently across all phases of Defence Housing Authority (DHA) Karachi.
+                </p>
+           </div>
+       </div>
+    </section>
+
+    <section class="brands">
+         <div class="section-title scroll-reveal">
+            <h2>Trusted Brands</h2>
+            <p>Leading CCTV & Intercom Brands</p>
+         </div>
+         <div class="brands-name scroll-reveal">
+            <div class="delay-1">DAHUA</div>
+            <div class="delay-2">HIKVISION</div>
+            <div class="delay-3">IMOU</div>
+            <div class="delay-4">EZVIZ</div>
+            <div class="delay-1">UNIVIEW</div>
+            <div class="delay-2">ZKTeco</div>
+            <div class="delay-3">COMMAX</div>
+            <div class="delay-4">Ring</div>
+         </div>
+    </section>
+
+    <footer>© 2026 NASCOM CCTV & Intercom Solution Provider | All Rights Reserved</footer>
+
+    <a href="https://wa.me/923002369330" target="_blank" class="whatsapp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        function setTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+                document.getElementById('optDark').classList.remove('active');
+                document.getElementById('optLight').classList.add('active');
+                localStorage.setItem('nascom-theme', 'light');
+            } else {
+                document.body.classList.remove('light-theme');
+                document.getElementById('optDark').classList.add('active');
+                document.getElementById('optLight').classList.remove('active');
+                localStorage.setItem('nascom-theme', 'dark');
+            }
+        }
+
+        // Apply saved theme on load
+        (function() {
+            var saved = localStorage.getItem('nascom-theme');
+            if (saved === 'light') setTheme('light');
+        })();
+    </script>
+
+</body>
+</html>
