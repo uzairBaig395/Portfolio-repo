@@ -1000,23 +1000,33 @@
           </div>
         </div>
 
-        <!-- ── Sign Up with Firebase ── -->
+        <!-- ── Auth Todo with Firebase ── -->
         <div class="portfolio-item firebase bg-slate-900/40 rounded-3xl overflow-hidden border border-slate-800 flex flex-col justify-between hover:scale-[1.01] hover:border-sky/30 transition-all duration-300">
           <div>
             <div class="relative overflow-hidden bg-slate-950 aspect-[16/10] flex items-center justify-center p-6">
-              <i class="fa-solid fa-user-plus text-5xl text-orange-400 opacity-80"></i>
-              <span class="absolute top-4 right-4 bg-orange-500/10 text-orange-400 font-mono text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border border-orange-500/20">Firebase</span>
+              <!-- Subtle glow blobs -->
+              <div class="absolute w-24 h-24 rounded-full opacity-20" style="background: radial-gradient(circle, #fb923c, transparent 70%); filter: blur(20px); left: 30%; top: 20%;"></div>
+              <div class="absolute w-20 h-20 rounded-full opacity-15" style="background: radial-gradient(circle, #38bdf8, transparent 70%); filter: blur(18px); right: 25%; bottom: 20%;"></div>
+              <!-- Stacked icons: lock + list -->
+              <div class="relative z-10 flex items-center space-x-3">
+                <i class="fa-solid fa-lock-open text-4xl text-orange-400 opacity-90"></i>
+                <span class="text-slate-600 text-2xl font-mono font-bold">+</span>
+                <i class="fa-solid fa-list-check text-4xl text-sky opacity-90"></i>
+              </div>
+              <span class="absolute top-4 left-4 bg-orange-500/10 text-orange-400 font-mono text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border border-orange-500/20">Auth</span>
+              <span class="absolute top-4 right-4 bg-sky/10 text-sky font-mono text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border border-sky/20">Firestore</span>
             </div>
             <div class="p-6">
-              <span class="text-[10px] font-mono text-slate-500 uppercase">Auth System</span>
-              <h3 class="text-lg font-bold text-white font-display mt-1">Sign Up with Firebase</h3>
-              <p class="text-xs sm:text-sm text-slate-400 font-light mt-2 leading-relaxed">A complete user authentication flow powered by Firebase Auth — handles sign-up, validation, and secure session management in real time.</p>
+              <span class="text-[10px] font-mono text-orange-400 uppercase tracking-wider font-bold">Firebase Auth + Todo + Firestore</span>
+              <h3 class="text-lg font-bold text-white font-display mt-1">Authentication Todo App</h3>
+              <p class="text-xs sm:text-sm text-slate-400 font-light mt-2 leading-relaxed">Full-stack Firebase app with secure user sign-up & login, a personal todo list per account, and real-time Firestore syncing — tasks are private to each authenticated user.</p>
             </div>
           </div>
           <div class="p-6 pt-0 border-t border-slate-900 flex flex-col space-y-3">
             <div class="flex items-center justify-between w-full pt-3">
               <div class="flex gap-1.5 flex-wrap">
                 <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Firebase Auth</span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">Firestore</span>
                 <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">JavaScript</span>
               </div>
               <button onclick="openProjectModal('signup-firebase')" class="text-xs font-semibold text-sky hover:underline font-mono flex items-center space-x-1.5 ml-2 shrink-0">
@@ -1025,7 +1035,7 @@
             </div>
             <div class="grid grid-cols-2 gap-2 pt-1">
               <a href="https://github.com/uzairBaig395/Portfolio-repo/tree/main/Projects/sign%20up%20wirh%20firebase" target="_blank" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-center text-xs font-mono font-medium text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5"><i class="fa-brands fa-github"></i> <span>View Code</span></a>
-              <a href="./Projects/sign up wirh firebase/index.html" target="_blank" class="px-3 py-2 bg-sky/10 hover:bg-sky/20 border border-sky/20 hover:border-sky/30 rounded-xl text-center text-xs font-mono font-medium text-sky transition-all flex items-center justify-center space-x-1.5"><i class="fa-solid fa-bolt"></i> <span>Live Demo</span></a>
+              <a href="./Projects/Authentication Todo/index.html" target="_blank" class="px-3 py-2 bg-sky/10 hover:bg-sky/20 border border-sky/20 hover:border-sky/30 rounded-xl text-center text-xs font-mono font-medium text-sky transition-all flex items-center justify-center space-x-1.5"><i class="fa-solid fa-bolt"></i> <span>Live Demo</span></a>
             </div>
           </div>
         </div>
@@ -1532,14 +1542,14 @@
         live: './Projects/Table Generator/Table generator.html'
       },
       'signup-firebase': {
-        title: 'Sign Up with Firebase',
-        badge: 'Firebase Auth',
+        title: 'Authentication Todo App',
+        badge: 'Auth + Firestore',
         badgeClass: 'bg-orange-500/10 text-orange-400 border border-orange-500/20',
-        desc: 'A complete user authentication system built with Firebase Authentication. Handles secure sign-up flows, form validation, real-time error feedback, and persistent session management.',
-        tags: ['Firebase Auth SDK', 'JavaScript ES6+', 'HTML/CSS', 'Form Validation', 'Session Management'],
-        icon: '<i class="fa-solid fa-user-plus text-orange-400"></i>',
+        desc: 'A full-stack Firebase project combining user authentication with a personal todo list. Users sign up or log in via Firebase Auth — each account gets its own private task list stored and synced in real time through Cloud Firestore. Includes form validation, live error feedback, secure session persistence, and per-user data isolation so no one sees another user\'s tasks.',
+        tags: ['Firebase Auth SDK', 'Cloud Firestore', 'JavaScript ES6+', 'HTML/CSS', 'Form Validation', 'Session Persistence', 'Real-Time Sync', 'Per-User Data'],
+        icon: '<span style="display:flex;gap:6px;align-items:center"><i class="fa-solid fa-lock-open text-orange-400"></i><i class="fa-solid fa-list-check text-sky"></i></span>',
         code: 'https://github.com/uzairBaig395/Portfolio-repo/tree/main/Projects/sign%20up%20wirh%20firebase',
-        live: './Projects/sign up wirh firebase/index.html'
+        live: './Projects/Authentication Todo/index.html'
       },
       'nascom': {
         title: 'Nascom Website',

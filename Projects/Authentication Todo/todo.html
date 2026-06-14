@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo List</title>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+      "firebase/analytics": "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js",
+      "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+    }
+  }
+  </script>
+
+  <style>
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* --- Nav --- */
+    nav {
+      width: 100%;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1a1a1a;
+      background: #0a0a0a;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .nav-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    #logoutbtn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      color: #f87171;
+      background: rgba(220, 60, 60, 0.08);
+      border: 1px solid rgba(220, 60, 60, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    #logoutbtn:hover {
+      background: rgba(220, 60, 60, 0.15);
+      border-color: rgba(220, 60, 60, 0.35);
+    }
+
+    /* --- Page layout --- */
+    .page {
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px 80px;
+    }
+
+    #main {
+      width: 100%;
+      max-width: 580px;
+    }
+
+    /* --- Page heading --- */
+    .page-heading {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    /* --- Input row --- */
+    #child1 {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    #todoinp {
+      flex: 1;
+      padding: 12px 14px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #todoinp::placeholder {
+      color: #444;
+    }
+
+    #todoinp:hover {
+      border-color: #333;
+    }
+
+    #todoinp:focus {
+      border-color: #555;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+    }
+
+    #addbtn,
+    #updatebtn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    #addbtn {
+      background: #fff;
+      color: #000;
+    }
+
+    #addbtn:hover {
+      background: #e5e5e5;
+    }
+
+    #addbtn:active {
+      transform: scale(0.98);
+    }
+
+    #updatebtn {
+      background: #1d4ed8;
+      color: #fff;
+      display: none;
+    }
+
+    #updatebtn:hover {
+      background: #2563eb;
+    }
+
+    #updatebtn:active {
+      transform: scale(0.98);
+    }
+
+    /* --- Section label --- */
+    .list-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    /* --- Todo items --- */
+  /* --- Todo items --- */
+#child2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.box {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  color: #e5e5e5;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.box:hover {
+  border-color: #2a2a2a;
+}
+
+.box-text {
+  flex: 1;
+  line-height: 1.5;
+  word-break: break-word;
+  color: #e5e5e5;
+}
+
+/* ===== COMPLETED TODO STYLE ===== */
+.box.completed {
+  background: #141a16;
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+.box.completed .box-text {
+  color: #a3a3a3;
+  text-decoration: line-through;
+  text-decoration-color: #737373;
+}
+
+/* ===== BUTTONS ===== */
+.box-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.delbtns,
+.editbtns,
+.donebtn,
+.notdonebtn {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.delbtns {
+  background: rgba(220, 60, 60, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(220, 60, 60, 0.2);
+}
+
+.delbtns:hover {
+  background: rgba(220, 60, 60, 0.18);
+}
+
+.editbtns {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.editbtns:hover {
+  background: rgba(59, 130, 246, 0.18);
+}
+
+.donebtn {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.donebtn:hover {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.notdonebtn {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.notdonebtn:hover {
+  background: rgba(245, 158, 11, 0.18);
+}
+
+.delbtns:active,
+.editbtns:active,
+.donebtn:active,
+.notdonebtn:active {
+  transform: scale(0.97);
+}
+
+    /* --- Responsive --- */
+    @media (max-width: 540px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .page {
+        padding: 32px 16px 60px;
+      }
+
+      .page-heading {
+        font-size: 22px;
+      }
+
+      #child1 {
+        flex-direction: column;
+      }
+
+      #addbtn,
+      #updatebtn {
+        width: 100%;
+        padding: 12px;
+      }
+
+      .box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .box-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .delbtns,
+      .editbtns,
+      .donebtn,
+      .notdonebtn {
+        padding: 7px 9px;
+        font-size: 11px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-dot"></div>
+      <span class="nav-title">Todo list</span>
+    </div>
+    <button id="logoutbtn">Log out</button>
+  </nav>
+
+  <div class="page">
+    <div id="main">
+
+      <h1 class="page-heading">My todos</h1>
+      <p class="page-sub">Keep track of everything you need to do.</p>
+
+      <div id="child1">
+        <input type="text" id="todoinp" placeholder="Add a new todo..." />
+        <button id="addbtn">Add todo</button>
+        <button id="updatebtn">Save</button>
+      </div>
+
+      <p class="list-label">Todos</p>
+
+      <div id="child2">
+        <!-- todo items injected by JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="./todo.js"></script>
+</body>
+</html>

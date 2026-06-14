@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        /* --- Brand --- */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 36px;
+            justify-content: center;
+        }
+
+        .brand-dot {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        /* --- Heading --- */
+        .heading {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .subheading {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 32px;
+        }
+
+        /* --- Card --- */
+        .card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 32px 28px;
+        }
+
+        /* --- Fields --- */
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #aaa;
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input::placeholder {
+            color: #444;
+        }
+
+        .field input:hover {
+            border-color: #333;
+        }
+
+        .field input:focus {
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+        }
+
+        /* --- Forgot password --- */
+        .field-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .field-row label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #aaa;
+            letter-spacing: 0.01em;
+        }
+
+        /* --- Messages --- */
+        .msg {
+            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        #account-error,
+        #fill-inputs-error,
+        #email-inp-error,
+        #password-inp-error {
+            background: rgba(220, 60, 60, 0.1);
+            border: 1px solid rgba(220, 60, 60, 0.2);
+            color: #f87171;
+        }
+
+        #box-btn-load {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* --- Button --- */
+        #login-btn {
+            width: 100%;
+            padding: 13px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        #login-btn:hover {
+            background: #e5e5e5;
+        }
+
+        #login-btn:active {
+            transform: scale(0.99);
+        }
+
+        /* --- Card footer --- */
+        .card-footer {
+            border-top: 1px solid #1e1e1e;
+            margin-top: 24px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .card-footer a {
+            color: #aaa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .card-footer a:hover {
+            color: #fff;
+        }
+
+        /* --- Terms --- */
+        .terms {
+            text-align: center;
+            font-size: 12px;
+            color: #444;
+            margin-top: 24px;
+            line-height: 1.7;
+        }
+
+        .terms a {
+            color: #555;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.15s;
+        }
+
+        .terms a:hover {
+            color: #aaa;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 20px;
+            }
+
+            .heading {
+                font-size: 24px;
+            }
+
+            body {
+                align-items: flex-start;
+                padding-top: 48px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card {
+                padding: 20px 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <div class="brand">
+            <div class="brand-dot"></div>
+            <span class="brand-name">Todo List</span>
+        </div>
+
+        <div class="card">
+
+            <h1 class="heading">Welcome back</h1>
+            <p class="subheading">Sign in to continue to your account.</p>
+
+            <div class="field">
+                <label for="email-inp">Email address</label>
+                <input type="email" id="email-inp" placeholder="you@example.com">
+            </div>
+
+            <div class="field">
+                <div class="field-row">
+                    <label for="password-inp">Password</label>
+                </div>
+                <input type="password" id="password-inp" placeholder="Enter your password">
+            </div>
+
+            <div id="box-button">
+                <p id="box-btn-load">Loading...</p>
+                <p id="account-error" class="msg">No account found with this email.</p>
+                <p id="fill-inputs-error" class="msg">Please fill in all fields.</p>
+                <p id="email-inp-error" class="msg">Enter a valid email address.</p>
+                <p id="password-inp-error" class="msg">Password is incorrect.</p>
+
+                <button id="login-btn">Sign in</button>
+            </div>
+
+            <div class="card-footer">
+                Don't have an account? <a href="./index.html">Sign up</a>
+            </div>
+
+        </div>
+
+        <p class="terms">
+            By signing in you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </p>
+
+    </div>
+
+    <script type="module" src="./login.js"></script>
+
+</body>
+</html>
