@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, auth, signInWithPopup, GoogleAuthProvider, provider, collection, addDoc, db, getAdditionalUserInfo } from "./firebaseConfig.js"; // 👈 Added getAdditionalUserInfo here
+import { getAuth, signInWithEmailAndPassword, auth, signInWithPopup, GoogleAuthProvider, provider, collection, addDoc, db, getAdditionalUserInfo, getDocs, query, where } from "./firebaseConfig.js"; 
 import { checkGuestStatus } from "./auth-guard.js";
 
 const emailInp = document.getElementById("email-inp");
@@ -15,6 +15,22 @@ const passwordInpError = document.getElementById("password-inp-error");
 // Checks if the user is already logged in on page load, redirects them if they are
 checkGuestStatus();
 
+// Helper function to find an existing user's docId from Firestore
+const getUserDocId = async (uid) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    let docId = null;
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+    });
+    return docId;
+  } catch (error) {
+    console.error("Error fetching user docId:", error);
+    return null;
+  }
+};
+
 // Independent function to record Google Sign-In users to database
 const adduser = async (loggedInUser) => {
   try {
@@ -26,8 +42,10 @@ const adduser = async (loggedInUser) => {
 
     console.log("Document written with ID:", docRef.id);
 
+    // 🚀 FIX: Store BOTH uid and docId so todo.js can read them properly!
     const userData = {
-      docId: docRef.id,
+      uid: loggedInUser.uid,
+      docId: docRef.id
     };
 
     localStorage.setItem("userData", JSON.stringify(userData));
@@ -38,9 +56,9 @@ const adduser = async (loggedInUser) => {
   }
 };
 
-//working on user login
+// working on user login
 const userlogin = () => {
-  //checking validation
+  // checking validation
   if(emailInp.value.length < 1 || passwordInp.value.length < 1 ) {
     emailInpError.style.display = "none";
     accountError.style.display = "none";
@@ -64,7 +82,7 @@ const userlogin = () => {
   }
 
   signInWithEmailAndPassword(auth, emailInp.value, passwordInp.value)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       fillInputsError.style.display = "none";
       emailInpError.style.display = "none";
       passwordInpError.style.display = "none";
@@ -72,6 +90,15 @@ const userlogin = () => {
 
       const user = userCredential.user;
       console.log(user);
+      
+      // 🚀 FIX: Fetch the user's Firestore docId and store credentials in localStorage
+      const docId = await getUserDocId(user.uid);
+      const userData = {
+        uid: user.uid,
+        docId: docId
+      };
+      localStorage.setItem("userData", JSON.stringify(userData));
+
       window.location.replace("./todo.html");
     })
     .catch((error) => {
@@ -86,23 +113,28 @@ const userlogin = () => {
 
 loginBtn.addEventListener("click", () => userlogin());
 
-//working on google sign in
+// working on google sign in
 const googleSignIn = () => {
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       const user = result.user;
       console.log("Google login success:", user);
       
-      // FIXED: Check if the user profile is brand new to prevent data duplicates
       const details = getAdditionalUserInfo(result);
       
       if (details.isNewUser) {
         // Save to database ONLY if they are completely new to your app
-        adduser(user).then(() => {
-          window.location.replace("./todo.html");
-        });
+        await adduser(user);
+        window.location.replace("./todo.html");
       } else {
-        // Existing user simply signs in and moves onto dashboard
+        // 🚀 FIX: Existing user signs in, grab their stored Firestore docId and set localStorage
+        const docId = await getUserDocId(user.uid);
+        const userData = {
+          uid: user.uid,
+          docId: docId
+        };
+        localStorage.setItem("userData", JSON.stringify(userData));
+        
         window.location.replace("./todo.html");
       }
 

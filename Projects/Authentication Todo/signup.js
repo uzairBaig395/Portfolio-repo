@@ -93,6 +93,7 @@ const adduser = async () => {
 
     const userData = {
       docId: docRef.id,
+      uid:user.uid
     };
 
     localStorage.setItem("userData", JSON.stringify(userData));
