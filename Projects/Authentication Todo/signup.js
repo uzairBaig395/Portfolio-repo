@@ -79,7 +79,7 @@ const registration = async() => {
 resgister.addEventListener("click", () => registration());
 
 //add user data to firestore after registration
-const adduser = async () => {
+const adduser = async (user) => {
   try {
     // if (!user) throw new Error("No authenticated user found to save to database.");
 
@@ -104,31 +104,45 @@ const adduser = async () => {
   }
 };
 
+
+//quering user data
+const getUserDocId = async (uid) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    let docId = null;
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+    });
+    return docId;
+  } catch (error) {
+    console.error("Error fetching user docId:", error);
+    return null;
+  }
+};
 // working on google signup
 const googleSignup = () => {
-  resetUI();
-  Loading.style.display = "block"; 
-
   signInWithPopup(auth, provider)
-    .then((result) => {
-      user = result.user; 
-      console.log("Google signup success:", user);
-
-      // Check if this is the very first time this user has logged into your app
+    .then(async (result) => {
+      const user = result.user;
+      console.log("Google login success:", user);
+      
       const details = getAdditionalUserInfo(result);
       
       if (details.isNewUser) {
-        // Only create a Firestore document if they are brand new!
-        adduser().then(() => {
-          Loading.style.display = "none";
-          accountsuccess.style.display = "block";
-          window.location.replace("./todo.html");
-        });
+        await adduser(user);
+        window.location.replace("./todo.html");
       } else {
-        // They already had an account, just redirect them quietly without duplicating data
-        Loading.style.display = "none";
+        const docId = await getUserDocId(user.uid);
+        const userData = {
+          uid: user.uid,
+          docId: docId
+        };
+        localStorage.setItem("userData", JSON.stringify(userData));
+        
         window.location.replace("./todo.html");
       }
+
     })
     .catch((error) => {
       Loading.style.display = "none";
