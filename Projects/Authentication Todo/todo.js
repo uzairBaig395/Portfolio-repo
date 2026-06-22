@@ -1,16 +1,5 @@
 import { db } from "./firebaseConfig.js";
-import { 
-  collection, 
-  addDoc, 
-  deleteDoc,
-  doc, 
-  query, 
-  updateDoc, // Used to safely modify fields without wiping out the owner's UID
-  auth, 
-  signOut, 
-  deleteUser, 
-  where, 
-  onSnapshot 
+import { collection, addDoc, deleteDoc,doc, query, updateDoc, auth, signOut, deleteUser, where, onSnapshot 
 } from "./firebaseConfig.js";
 import { requireGuest } from "./auth-guard.js";
 
@@ -32,13 +21,9 @@ const userID = JSON.parse(window.localStorage.getItem("userData"));
 const usersignout = async () => {
   try {
     await signOut(auth);
-    
-    // 🚀 FIX: Wipe out localStorage immediately on logout so IDs don't cross over!
     window.localStorage.removeItem("userData"); 
     console.log('success on sign out');
-    
-    // Redirect to login screen after clearing data
-    window.location.href = "index.html"; 
+    window.location.replace = "index.html"; 
   } catch (error) {
     console.log('error on sign out => ', error);
   }
@@ -56,7 +41,7 @@ addbtn.addEventListener("click", async () => {
     const todoObj = {
       Todo: todoinp.value,
       iscomplete: false,
-      UID: userID.uid, // Explicitly tags this item with the current user's ID
+      UID: userID.uid, 
       TodoID: new Date().getTime(),
       createdAt: Date.now()
     };
@@ -68,14 +53,14 @@ addbtn.addEventListener("click", async () => {
   }
 });
 
-// Working on getting data (Filters data securely by active user's UID)
+// Working on getting data 
 let getdata = async () => {
   try {
     const q = query(collection(db, "Todos"), where("UID", "==", userID.uid));
     
     // Sets up real-time stream listener
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      Todos = []; // Reset local array on database updates to prevent list duplication
+      Todos = []; 
       
       querySnapshot.forEach((doc) => {        
         const data = doc.data(); 
@@ -146,7 +131,6 @@ let renderTodo = () => {
         }
         child2.innerText = "Loading...";
         
-        // updateDoc only alters changed keys, keeping the UID completely untouched
         await updateDoc(doc(db, "Todos", num.id), {
           Todo: todoinp.value,
           createdAt: Date.now()
@@ -205,16 +189,21 @@ cancelBtn.onclick = () => {
 }
 deleteAccountbtn.onclick = async () => {
   try {
-    await deleteUserData(); // delete firestore document first
+    await deleteUserData(); 
 
     const user = auth.currentUser;
-    await deleteUser(user); // then delete auth account
+    await deleteUser(user); 
 
     console.log("User and Firestore data deleted");
     window.localStorage.removeItem("userData");
-    window.location.href = "login.html";
+    window.location.replace = "index.html";
   } catch (error) {
     console.log(error);
+    if(error.code === "auth/requires-recent-login") {
+      alert("Please login again your Delete token is expired")
+    } else {
+      alert("An error occured while deleting your account")
+    }
   }
 };
 
