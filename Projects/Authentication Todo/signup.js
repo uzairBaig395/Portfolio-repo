@@ -1,5 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, auth, collection,
-addDoc, db, GoogleAuthProvider, provider, signInWithPopup,getAdditionalUserInfo } from "./firebaseConfig.js";
+addDoc, db, GoogleAuthProvider, provider, signInWithPopup, getAdditionalUserInfo,
+query, where, getDocs } from "./firebaseConfig.js";
 import { redirectIfLoggedIn } from "./auth-guard.js";
 
 // getting elements
@@ -58,7 +59,7 @@ const registration = async() => {
       user = userCredential.user;
       console.log("Email signup success:", user);
       
-      adduser().then(()=> {
+      adduser(user).then(()=> {
         Loading.style.display = "none";
         accountsuccess.style.display = "block";
         emailinp.value = "";
@@ -122,6 +123,9 @@ const getUserDocId = async (uid) => {
 };
 // working on google signup
 const googleSignup = () => {
+  resetUI();
+  Loading.style.display = "block";
+
   signInWithPopup(auth, provider)
     .then(async (result) => {
       const user = result.user;
@@ -131,6 +135,7 @@ const googleSignup = () => {
       
       if (details.isNewUser) {
         await adduser(user);
+        Loading.style.display = "none";
         window.location.replace("./todo.html");
       } else {
         const docId = await getUserDocId(user.uid);
@@ -140,6 +145,7 @@ const googleSignup = () => {
         };
         localStorage.setItem("userData", JSON.stringify(userData));
         
+        Loading.style.display = "none";
         window.location.replace("./todo.html");
       }
 

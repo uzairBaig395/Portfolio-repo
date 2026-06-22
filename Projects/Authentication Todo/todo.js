@@ -201,9 +201,7 @@ deleteAccountbtn.onclick = async () => {
     console.log(error);
     if(error.code === "auth/requires-recent-login") {
       alert("Please login again your Delete token is expired")
-    } else {
-      alert("An error occured while deleting your account")
-    }
+    } 
   }
 };
 
