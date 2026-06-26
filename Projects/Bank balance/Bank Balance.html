@@ -3,151 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bank Balance</title>
+<title>Bank Balance — Statement Card</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
     :root {
         --ink: #102A3B;
         --ink-soft: #1C3C50;
-        --ledger: #F7F3E8;
-        --ledger-line: #E2DBC6;
+        --ledger: #F8F4E9;
+        --ledger-line: #E4DCC4;
         --paper: #FFFDF8;
         --slate: #44505A;
         --brass: #9C7A3C;
-        --brass-light: #C9A86A;
+        --brass-light: #D8B872;
+        --brass-dark: #7A5F2C;
         --forest: #1F6F4A;
-        --forest-dark: #175939;
+        --forest-dark: #154E33;
         --clay: #A8463A;
-        --clay-dark: #8C3A30;
+        --clay-dark: #832F26;
         --focus: #3D7BBF;
     }
 
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
 
     body {
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-        background: radial-gradient(circle at 20% 0%, var(--ink-soft) 0%, var(--ink) 55%, #081924 100%);
         font-family: 'IBM Plex Sans', sans-serif;
         color: var(--slate);
+        background-color: #081826;
+        background-image:
+            repeating-linear-gradient(115deg, rgba(216,184,114,0.05) 0px, rgba(216,184,114,0.05) 1px, transparent 1px, transparent 7px),
+            repeating-linear-gradient(25deg, rgba(216,184,114,0.04) 0px, rgba(216,184,114,0.04) 1px, transparent 1px, transparent 7px),
+            radial-gradient(circle at 18% 8%, #234862 0%, transparent 45%),
+            radial-gradient(circle at 85% 92%, #0e2c3f 0%, transparent 55%),
+            linear-gradient(160deg, #16374d 0%, #0c2233 55%, #061420 100%);
+        background-attachment: fixed;
     }
 
     .page {
         width: 100%;
         display: flex;
         justify-content: center;
-        padding: 64px 20px;
+        padding: clamp(28px, 6vw, 72px) 18px;
     }
 
     .main {
-        width: 420px;
+        width: 440px;
         max-width: 100%;
         background-color: var(--ledger);
-        border-radius: 6px;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
-        align-items: stretch;
         position: relative;
-        padding: 0 0 32px;
+        overflow: hidden;
+        padding-bottom: 30px;
         box-shadow:
-            0 1px 0 rgba(255, 255, 255, 0.4) inset,
-            0 30px 60px -20px rgba(0, 0, 0, 0.55),
-            0 0 0 1px rgba(16, 42, 59, 0.08);
-        background-image: repeating-linear-gradient(
-            to bottom,
-            transparent 0px,
-            transparent 35px,
-            var(--ledger-line) 36px
-        );
-        background-position: 0 132px;
+            0 1px 0 rgba(255, 255, 255, 0.5) inset,
+            0 40px 80px -28px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(16, 42, 59, 0.10);
     }
 
-    /* Passbook stitched edge along the top */
-    .main::before {
+    .main::after {
         content: "";
-        display: block;
-        height: 10px;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            repeating-radial-gradient(circle at 50% 0%, rgba(156,122,60,0.05) 0px, transparent 2px, transparent 9px),
+            repeating-linear-gradient(0deg, transparent 0px, transparent 34px, var(--ledger-line) 35px);
+        background-position: 0 158px;
+        z-index: 0;
+    }
+
+    .watermark {
+        position: absolute;
+        top: 46%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-13deg);
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 64px;
+        letter-spacing: 0.12em;
+        color: var(--brass);
+        opacity: 0.07;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 0;
+        user-select: none;
+    }
+
+    .gold-edge {
+        height: 8px;
         width: 100%;
-        border-radius: 6px 6px 0 0;
-        background: linear-gradient(135deg, var(--brass-light), var(--brass));
+        background: linear-gradient(90deg, var(--brass-dark), var(--brass-light) 35%, var(--brass) 65%, var(--brass-dark));
+        position: relative;
+        z-index: 1;
     }
 
     .letterhead {
-        padding: 28px 32px 22px;
+        padding: 26px 30px 20px;
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 12px;
+        gap: 14px;
         border-bottom: 1px solid var(--ledger-line);
-        background-color: var(--ledger);
-    }
-
-    .letterhead .mark {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--ink-soft), var(--ink));
-        flex-shrink: 0;
         position: relative;
+        z-index: 1;
     }
 
-    .letterhead .mark::after {
-        content: "";
-        position: absolute;
-        inset: 7px;
-        border: 1.5px solid var(--brass-light);
-        border-radius: 50%;
-    }
-
-    .letterhead h1 {
-        font-family: 'Fraunces', serif;
-        font-weight: 700;
-        font-size: 22px;
-        letter-spacing: 0.01em;
-        color: var(--ink);
-        margin: 0;
-        line-height: 1.15;
-    }
+    .letterhead .identity { min-width: 0; }
 
     .letterhead .eyebrow {
         display: block;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 10px;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--brass);
-        margin-bottom: 4px;
+        color: var(--brass-dark);
+        margin-bottom: 5px;
+    }
+
+    .letterhead h1 {
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-size: clamp(20px, 5vw, 23px);
+        letter-spacing: 0.01em;
+        color: var(--ink);
+        margin: 0;
+        line-height: 1.18;
+    }
+
+    .letterhead .acct {
+        display: block;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: var(--slate);
+        opacity: 0.65;
+        margin-top: 6px;
+        letter-spacing: 0.04em;
+    }
+
+    /* Professional Premium Logout Button Styles */
+    .logout-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: rgba(168, 70, 58, 0.06);
+        border: 1px solid rgba(168, 70, 58, 0.18);
+        border-radius: 4px;
+        padding: 6px 12px;
+        margin-top: 14px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--clay);
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .logout-btn svg {
+        transition: transform 0.15s ease;
+    }
+
+    .logout-btn:hover {
+        background-color: var(--clay);
+        border-color: var(--clay);
+        color: var(--paper);
+        box-shadow: 0 2px 6px rgba(168, 70, 58, 0.15);
+    }
+
+    .logout-btn:hover svg {
+        transform: translateX(2px);
+    }
+
+    .logout-btn:active {
+        transform: translateY(0.5px);
+        box-shadow: none;
+    }
+
+    .logout-btn:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+    }
+
+    .seal {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: radial-gradient(circle at 32% 28%, var(--ink-soft), var(--ink) 70%);
+        position: relative;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .seal::before {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        border: 1.4px solid var(--brass-light);
+        border-radius: 50%;
+    }
+    .seal::after {
+        content: "B";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-size: 17px;
+        color: var(--brass-light);
+    }
+
+    .toast-container {
+        padding: 14px 30px 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .toast {
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        display: none;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        line-height: 1.4;
     }
 
     .ledger-row {
-        padding: 26px 32px 24px;
+        padding: 28px 30px 22px;
+        position: relative;
+        z-index: 1;
     }
 
     .ledger-row .eyebrow {
         display: block;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 11px;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
         color: var(--slate);
         opacity: 0.65;
         margin-bottom: 10px;
     }
 
+    .balance-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+
+    .currency {
+        font-family: 'IBM Plex Mono', monospace;
+        font-weight: 500;
+        font-size: clamp(18px, 4vw, 22px);
+        color: var(--brass-dark);
+    }
+
     #show {
         font-family: 'IBM Plex Mono', monospace;
         font-weight: 600;
-        font-size: 44px;
+        font-size: clamp(34px, 9vw, 46px);
         color: var(--ink);
         margin: 0;
         letter-spacing: 0.01em;
@@ -155,17 +279,10 @@
         word-break: break-all;
     }
 
-    #show::before {
-        content: "Rs ";
-        font-size: 22px;
-        font-weight: 500;
-        color: var(--brass);
-        vertical-align: middle;
-        margin-right: 2px;
-    }
-
     .field {
-        padding: 4px 32px 6px;
+        padding: 4px 30px 6px;
+        position: relative;
+        z-index: 1;
     }
 
     .field label {
@@ -179,24 +296,35 @@
         margin-bottom: 8px;
     }
 
+    .input-wrap { position: relative; }
+
+    .input-wrap .prefix {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 14px;
+        color: var(--brass-dark);
+        font-weight: 600;
+        pointer-events: none;
+    }
+
     #balance {
         width: 100%;
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 17px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 16px;
         font-weight: 500;
         color: var(--ink);
         background-color: var(--paper);
         border: 1.5px solid var(--ledger-line);
         border-radius: 8px;
-        padding: 13px 14px;
+        padding: 14px 14px 14px 40px;
         outline: none;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
-    #balance::placeholder {
-        color: #A8ADA0;
-        font-weight: 400;
-    }
+    #balance::placeholder { color: #A8ADA0; font-weight: 400; }
 
     #balance:focus-visible {
         border-color: var(--focus);
@@ -206,7 +334,9 @@
     .actions {
         display: flex;
         gap: 10px;
-        padding: 20px 32px 4px;
+        padding: 22px 30px 4px;
+        position: relative;
+        z-index: 1;
     }
 
     .add, .sub, .total {
@@ -220,7 +350,7 @@
         border-radius: 8px;
         padding: 13px 10px;
         cursor: pointer;
-        transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease, background-color 0.12s ease;
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 6px 14px -6px rgba(0, 0, 0, 0.4);
     }
 
@@ -237,77 +367,39 @@
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset, 0 2px 6px -2px rgba(0, 0, 0, 0.4);
     }
 
-    .add:focus-visible,
-    .sub:focus-visible,
-    .total:focus-visible,
-    #balance:focus-visible {
+    .add:focus-visible, .sub:focus-visible, .total:focus-visible, #balance:focus-visible {
         outline: 2px solid var(--focus);
         outline-offset: 2px;
     }
 
     .footnote {
-        padding: 18px 32px 0;
+        padding: 20px 30px 0;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 10.5px;
         letter-spacing: 0.04em;
         color: var(--slate);
         opacity: 0.55;
         text-align: center;
+        position: relative;
+        z-index: 1;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        * {
-            transition: none !important;
-        }
+        * { transition: none !important; }
     }
 
-    /* ✅ RESPONSIVE PART */
     @media (max-width: 500px) {
-        .page {
-            padding: 36px 14px;
-        }
-
-        .main {
-            width: 100%;
-        }
-
-        .letterhead {
-            padding: 22px 22px 18px;
-        }
-
-        .letterhead h1 {
-            font-size: 19px;
-        }
-
-        .ledger-row {
-            padding: 22px 22px 20px;
-        }
-
-        #show {
-            font-size: 36px;
-        }
-
-        #show::before {
-            font-size: 18px;
-        }
-
-        .field {
-            padding: 4px 22px 6px;
-        }
-
-        .actions {
-            flex-direction: column;
-            padding: 18px 22px 4px;
-        }
-
-        .add, .sub, .total {
-            width: 100%;
-            padding: 14px 10px;
-        }
-
-        .footnote {
-            padding: 16px 22px 0;
-        }
+        .page { padding: 30px 12px; }
+        .main { width: 100%; border-radius: 8px; }
+        .letterhead { padding: 22px 20px 16px; }
+        .ledger-row { padding: 24px 20px 18px; }
+        .field { padding: 4px 20px 6px; }
+        .actions { flex-direction: column; padding: 18px 20px 4px; }
+        .add, .sub, .total { width: 100%; padding: 14px 10px; }
+        .footnote { padding: 16px 20px 0; }
+        .toast-container { padding: 12px 20px 0; }
+        .watermark { font-size: 44px; }
+        .seal { width: 38px; height: 38px; }
     }
 </style>
 </head>
@@ -316,67 +408,59 @@
 
 <div class="page">
     <div class="main">
+        <div class="gold-edge"></div>
+        <div class="watermark">SPECIMEN</div>
+
         <div class="letterhead">
-            <div>
+            <div class="identity">
                 <span class="eyebrow">Statement Card</span>
-                <h1>Bank Balance</h1>
+                <h1>JARVIS Global Bank</h1>
+                <span class="acct">A/C •••• 4471 — Personal Savings</span>
+                
+                <button id="logoutbtn" class="logout-btn" aria-label="Log out of account">
+                    <span>Log Out</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
             </div>
-            <div class="mark" aria-hidden="true"></div>
+            <div class="seal" aria-hidden="true"></div>
+        </div>
+
+        <div class="toast-container">
+            <div id="adderror" class="toast error">Deposit minimum Rs 500</div>
+            <div id="suberror" class="toast error">Withdrawal minimum Rs 500</div>
+            <div id="amounterror" class="toast error">This amount of money does not exist in your account</div>
         </div>
 
         <div class="ledger-row">
             <span class="eyebrow">Current balance</span>
-            <h1 id="show">-</h1>
+            <div class="balance-line">
+                <span class="currency">Rs</span>
+                <h1 id="show">-</h1>
+            </div>
         </div>
 
         <div class="field">
             <label for="balance">Enter amount</label>
-            <input type="number" id="balance" placeholder="e.g. 1000">
+            <div class="input-wrap">
+                <span class="prefix">Rs</span>
+                <input type="number" id="balance" placeholder="1,000">
+            </div>
         </div>
 
         <div class="actions">
-            <button class="add" onclick="add()">Add</button>
-            <button class="sub" onclick="sub()">Subtract</button>
-            <button class="total" onclick="total()">Total</button>
+            <button class="add" id="addbtn">Deposit</button>
+            <button class="sub" id="subbtn">Withdrawal</button>
+            <button class="total" id="totalbtn">Total</button>
         </div>
 
         <p class="footnote">Minimum transaction amount: Rs 500</p>
     </div>
 </div>
 
-<script>
-    let Total = 0;
-let balanceinp = document.getElementById("balance");
-let show = document.getElementById("show");
-//working on add
-function add() {
-    if(balanceinp.value < 500) {
-        alert("add minimum 500")
-        return;
-    }
-    Total += Number(balanceinp.value);
-    alert("your amount is successfully added")
-    balanceinp.value = "";
-    }
-//working on subtract
-function sub() {
-    if(balanceinp.value < 500) {
-        alert("subtract minimum 500")
-        return;
-    }
-    else if(balanceinp.value > Total) {
-        alert("This amount of money does not exist in your account")
-        return;
-    }
-    Total -= balanceinp.value;
-    alert("your amount is successfully subtracted")
-    balanceinp.value = "";
-}
-//working on total
-function total() {
-    show.innerText = Total;
-}
-</script>
-
+<script type="module" src="./bank.js"></script>
 </body>
 </html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In — Ledger &amp; Crest Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --ink: #102A3B;
+        --ink-soft: #1C3C50;
+        --ledger: #F8F4E9;
+        --ledger-line: #E4DCC4;
+        --paper: #FFFDF8;
+        --slate: #44505A;
+        --brass: #9C7A3C;
+        --brass-light: #D8B872;
+        --brass-dark: #7A5F2C;
+        --forest: #1F6F4A;
+        --forest-dark: #154E33;
+        --clay: #A8463A;
+        --clay-light: #FDF3F2;
+        --focus: #3D7BBF;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        font-family: 'IBM Plex Sans', sans-serif;
+        color: var(--slate);
+        background-color: #081826;
+        background-image:
+            repeating-linear-gradient(115deg, rgba(216,184,114,0.05) 0px, rgba(216,184,114,0.05) 1px, transparent 1px, transparent 7px),
+            repeating-linear-gradient(25deg, rgba(216,184,114,0.04) 0px, rgba(216,184,114,0.04) 1px, transparent 1px, transparent 7px),
+            radial-gradient(circle at 18% 8%, #234862 0%, transparent 45%),
+            radial-gradient(circle at 85% 92%, #0e2c3f 0%, transparent 55%),
+            linear-gradient(160deg, #16374d 0%, #0c2233 55%, #061420 100%);
+        background-attachment: fixed;
+    }
+
+    .page {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: clamp(28px, 6vw, 72px) 18px;
+    }
+
+    .main {
+        width: 440px;
+        max-width: 100%;
+        background-color: var(--ledger);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 30px;
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.5) inset,
+            0 40px 80px -28px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(16, 42, 59, 0.10);
+    }
+
+    .main::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            repeating-radial-gradient(circle at 50% 0%, rgba(156,122,60,0.05) 0px, transparent 2px, transparent 9px),
+            repeating-linear-gradient(0deg, transparent 0px, transparent 34px, var(--ledger-line) 35px);
+        background-position: 0 158px;
+        z-index: 0;
+    }
+
+    .watermark {
+        position: absolute;
+        top: 46%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-13deg);
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 64px;
+        letter-spacing: 0.12em;
+        color: var(--brass);
+        opacity: 0.07;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 0;
+        user-select: none;
+    }
+
+    .gold-edge {
+        height: 8px;
+        width: 100%;
+        background: linear-gradient(90deg, var(--brass-dark), var(--brass-light) 35%, var(--brass) 65%, var(--brass-dark));
+        position: relative;
+        z-index: 1;
+    }
+
+    .letterhead {
+        padding: 26px 30px 18px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        border-bottom: 1px solid var(--ledger-line);
+        position: relative;
+        z-index: 1;
+    }
+
+    .letterhead .identity { min-width: 0; }
+
+    .letterhead .eyebrow {
+        display: block;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brass-dark);
+        margin-bottom: 5px;
+    }
+
+    .letterhead h1 {
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-size: clamp(20px, 5vw, 23px);
+        letter-spacing: 0.01em;
+        color: var(--ink);
+        margin: 0;
+        line-height: 1.18;
+    }
+
+    .letterhead .sub {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: var(--slate);
+        opacity: 0.65;
+        margin-top: 6px;
+        letter-spacing: 0.04em;
+    }
+
+    .seal {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: radial-gradient(circle at 32% 28%, var(--ink-soft), var(--ink) 70%);
+        position: relative;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .seal::before {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        border: 1.4px solid var(--brass-light);
+        border-radius: 50%;
+    }
+    .seal::after {
+        content: "B";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-size: 17px;
+        color: var(--brass-light);
+    }
+
+    .form-area {
+        padding: 28px 30px 6px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .field { margin-bottom: 18px; }
+
+    .field label {
+        display: block;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate);
+        opacity: 0.7;
+        margin-bottom: 8px;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-wrap .icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--brass-dark);
+        display: flex;
+        pointer-events: none;
+    }
+    .input-wrap .icon svg { width: 16px; height: 16px; }
+
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--ink);
+        background-color: var(--paper);
+        border: 1.5px solid var(--ledger-line);
+        border-radius: 8px;
+        padding: 14px 14px 14px 42px;
+        outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input::placeholder { color: #A8ADA0; font-weight: 400; }
+
+    input:focus-visible {
+        border-color: var(--focus);
+        box-shadow: 0 0 0 3px rgba(61, 123, 191, 0.18);
+    }
+
+    .error-msg {
+        background-color: var(--clay-light);
+        border: 1.5px solid var(--clay);
+        color: var(--clay);
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 16px;
+        align-items: center;
+        gap: 8px;
+        animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .continue-btn {
+        width: 100%;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        color: var(--paper);
+        background-color: var(--forest);
+        border: none;
+        border-radius: 8px;
+        padding: 14px 10px;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 6px 14px -6px rgba(0, 0, 0, 0.4);
+    }
+    .continue-btn:hover { background-color: var(--forest-dark); }
+    .continue-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset, 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0 18px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate);
+        opacity: 0.55;
+    }
+    .divider::before, .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: var(--ledger-line);
+    }
+
+    .google-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+        background-color: var(--paper);
+        border: 1.5px solid var(--ledger-line);
+        border-radius: 8px;
+        padding: 13px 10px;
+        cursor: pointer;
+        transition: border-color 0.12s ease, background-color 0.12s ease, transform 0.12s ease;
+    }
+    .google-btn:hover { background-color: #FBF8F0; border-color: var(--brass-light); }
+    .google-btn:active { transform: translateY(1px); }
+    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .continue-btn:focus-visible,
+    .google-btn:focus-visible,
+    input:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+    }
+
+    .footnote {
+        padding: 22px 30px 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12.5px;
+        color: var(--slate);
+        opacity: 0.75;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+    .footnote a {
+        color: var(--brass-dark);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .footnote a:hover { text-decoration: underline; }
+
+    .legal {
+        padding: 14px 30px 0;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.02em;
+        color: var(--slate);
+        opacity: 0.5;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(248, 244, 233, 0.88);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .loading-overlay.is-active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .loading-ring {
+        width: 54px;
+        height: 54px;
+        border: 3px solid var(--ledger-line);
+        border-top-color: var(--brass);
+        border-radius: 50%;
+        animation: spinRing 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        margin-bottom: 20px;
+    }
+
+    .loading-title {
+        font-family: 'Fraunces', serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 0 0 6px 0;
+    }
+
+    .loading-subtitle {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: var(--slate);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        margin: 0;
+    }
+
+    @keyframes spinRing {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; }
+        .loading-ring { animation: spinRing 1.5s linear infinite; }
+    }
+
+    @media (max-width: 500px) {
+        .page { padding: 30px 12px; }
+        .main { width: 100%; border-radius: 8px; }
+        .letterhead { padding: 22px 20px 16px; }
+        .form-area { padding: 24px 20px 6px; }
+        .footnote { padding: 18px 20px 0; }
+        .legal { padding: 12px 20px 0; }
+        .watermark { font-size: 44px; }
+        .seal { width: 38px; height: 38px; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page">
+    <div class="main">
+        <div class="gold-edge"></div>
+        <div class="watermark">SPECIMEN</div>
+
+        <div id="loading-layer" class="loading-overlay">
+            <div class="loading-container">
+                <div class="loading-ring"></div>
+                <h3 class="loading-title">Verifying Vault Access</h3>
+                <p class="loading-subtitle">Opening Ledger Book...</p>
+            </div>
+        </div>
+
+        <div class="letterhead">
+            <div class="identity">
+                <span class="eyebrow">Account Access</span>
+                <h1>JARVIS Global Bank</h1>
+                <span class="sub">Log in to your secure platform</span>
+            </div>
+            <div class="seal" aria-hidden="true"></div>
+        </div>
+
+        <div class="form-area">
+            <div class="field">
+                <label for="email">Email address</label>
+                <div class="input-wrap">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" stroke="none"/><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>
+                    </span>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <span class="icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    </span>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <div id="error-box">
+                <p id="err-empty" class="error-msg" style="display: none;">Please fulfill all fields.</p>
+                <p id="err-invalid" class="error-msg" style="display: none;">Please enter a valid email format.</p>
+                <p id="err-length" class="error-msg" style="display: none;">Password must contain at least 8 characters.</p>
+                <!-- <p id="err-wrong" class="error-msg" style="display: none;">Incorrect email or password credentials.</p> -->
+                <p id="err-notfound" class="error-msg" style="display: none;">No account found with this email and Password.</p>
+            </div>
+
+            <button id="loginbtn" type="button" class="continue-btn">Log In</button>
+
+            <div class="divider">or</div>
+
+            <button id="googlebtn" type="button" class="google-btn">
+                <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20.5H24v7h11.3C33.7 31.9 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 5 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l5.8 4.3C13.6 15.6 18.4 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 7 29.5 5 24 5c-7.6 0-14.2 4.3-17.7 9.7z"/><path fill="#4CAF50" d="M24 43c5.4 0 10.3-2.1 13.9-5.4l-6.4-5.4C29.7 33.8 27 35 24 35c-5.3 0-9.7-3.1-11.3-7.5l-6 4.6C9.7 39 16.3 43 24 43z"/><path fill="#1976D2" d="M43.6 20.5H42V20.5H24v7h11.3c-.8 2.2-2.2 4.1-4.1 5.3l6.4 5.4C40.9 35 43 30.3 43 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+                Continue with Google
+            </button>
+        </div>
+
+        <div class="footnote">New to the registry? <a href="./index.html">Create an account</a></div>
+        <p class="legal">Protected under multi-layer institutional grade authentication protocols.</p>
+    </div>
+</div>
+
+<script type="module" src="./login.js"></script>
+</body>
+</html>
