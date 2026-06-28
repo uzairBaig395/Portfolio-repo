@@ -7,7 +7,7 @@ export function redirectIfAuthenticated() {
       
       // Only redirect if they are already logged in AND not currently trying to authenticate
       if (user && !window.location.search.includes('apiKey')) {
-        window.location.replace("./Bank balance.html");
+        window.location.replace("./Balance.html");
       }
     });
   } catch (error) {
@@ -15,7 +15,7 @@ export function redirectIfAuthenticated() {
   }
 }
 
-// Rename this one to use on your private dashboard pages (like Bank balance.html)
+// Rename this one to use on your private dashboard pages (like Balance.html)
 // export function requireAuth() {
 //   try {
 //     auth.onAuthStateChanged((user) => {
