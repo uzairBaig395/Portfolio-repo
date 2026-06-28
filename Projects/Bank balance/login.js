@@ -1,30 +1,25 @@
-// importing
 import { 
   auth, 
-  doc, 
-  getAuth, 
   signInWithEmailAndPassword, 
-  GoogleAuthProvider,     
   provider,               
-  signInWithRedirect,     
-  getRedirectResult,       
+  signInWithPopup,        // Updated to use popup
   getAdditionalUserInfo,  
   db,                     
   collection,             
-  addDoc                  
+  addDoc,
+  query,        
+  where,        
+  getDocs       
 } from "./firebaseConfig.js";
 import { redirectIfAuthenticated } from "./authGuard.js";
 
-// checking user is exist or not
 redirectIfAuthenticated();
 
-// getting elements
 const emailinp = document.getElementById("email");
 const passwordinp = document.getElementById("password");
 const loginbtn = document.getElementById("loginbtn");
 const googleBtn = document.getElementById("googlebtn"); 
 
-// getting errors
 const emptyError = document.getElementById("err-empty");
 const emailError = document.getElementById("err-invalid");
 const passwordError = document.getElementById("err-length");
@@ -32,7 +27,6 @@ const notFoundError = document.getElementById("err-notfound");
 
 const loadingLayer = document.getElementById("loading-layer");
 
-// Helper function to reset error messages before validation
 const resetErrors = () => {
   emptyError.style.display = "none";
   emailError.style.display = "none";
@@ -40,35 +34,23 @@ const resetErrors = () => {
   notFoundError.style.display = "none";
 };
 
-// Check if user is returning from Google Redirect Sign-In
-const handleRedirectResult = async () => {
+// Query user document ID from Firestore
+const getUserDocId = async (uid) => {
   try {
-    const result = await getRedirectResult(auth);
-    if (result) {
-      loadingLayer.classList.add("is-active"); 
-      const user = result.user;
-      
-      // Check if the user signed up via Google for the very first time here
-      const details = getAdditionalUserInfo(result);
-      if (details.isNewUser) {
-        await addUserCredential(user.uid, user.email);
-      } else {
-        // Returning user: Just store their UID so the dashboard can load their balance
-        window.localStorage.setItem("userUID", user.uid);
-      }
-      
-      loadingLayer.classList.remove("is-active");
-      window.location.replace("./Bank%20balance.html"); // Fixed space format
-    }
+    const q = query(collection(db, "Users"), where("UID", "==", uid));
+    const querySnapshot = await getDocs(q);
+    let docId = null;
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+    });
+    return docId;
   } catch (error) {
-    loadingLayer.classList.remove("is-active");
-    console.error("Redirect Result Error:", error.code, error.message);
+    console.error("Error fetching user docId:", error);
+    return null;
   }
 };
 
-handleRedirectResult();
-
-// Helper function to add user credentials to database (same as signup)
+// Helper function to add user credentials to Firestore and LocalStorage
 const addUserCredential = async (userUID, useremail) => {
   try {
     const docRef = await addDoc(collection(db, "Users"), {
@@ -76,15 +58,20 @@ const addUserCredential = async (userUID, useremail) => {
       UID: userUID,
       createdAt: new Date()
     });
-    console.log("Document written with ID: ", docRef.id);
-    window.localStorage.setItem("userUID", userUID);    
+    
+    const userData = {
+      docId: docRef.id,
+      uid: userUID
+    };
+
+    window.localStorage.setItem("userData", JSON.stringify(userData));
   } catch (error) {
     console.error("Error adding document: ", error);
     throw error; 
   }
 };
 
-// working on user log in (Email/Password)
+// User log in flow (Email/Password)
 const userLogIn = () => {
   resetErrors();
   
@@ -104,13 +91,18 @@ const userLogIn = () => {
   loadingLayer.classList.add("is-active");
   
   signInWithEmailAndPassword(auth, emailinp.value, passwordinp.value)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
-      console.log(user);
       
-      window.localStorage.setItem("userUID", user.uid);
+      const docId = await getUserDocId(user.uid);
+      const userData = {
+        uid: user.uid,
+        docId: docId
+      };
+      
+      window.localStorage.setItem("userData", JSON.stringify(userData));
       loadingLayer.classList.remove("is-active");
-      window.location.replace("./Bank%20balance.html"); // Fixed space format
+      window.location.replace("./Balance.html");
     })
     .catch((error) => {
       loadingLayer.classList.remove("is-active");
@@ -123,13 +115,35 @@ const userLogIn = () => {
     });
 };
 
-// working with google login
+// Google Authentication Flow via Popup
 const GoogleLogin = async () => {
   resetErrors();
   loadingLayer.classList.add("is-active"); 
+  
   try {
-    // Triggers redirect instead of a popup window
-    await signInWithRedirect(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    
+    if (result) {
+      const user = result.user;
+      const details = getAdditionalUserInfo(result);
+      
+      if (details.isNewUser) {
+        // Fallback for new users logging in via Google for the first time
+        await addUserCredential(user.uid, user.email);
+      } else {
+        // Fetch existing record details for returning users
+        const docId = await getUserDocId(user.uid);
+        const userData = {
+          uid: user.uid,
+          docId: docId
+        };
+        window.localStorage.setItem("userData", JSON.stringify(userData));
+      }
+      
+      loadingLayer.classList.remove("is-active");
+      // Seamlessly redirect to application landing layout
+      window.location.replace("./Balance.html");
+    }
   } catch (error) {
     loadingLayer.classList.remove("is-active");
     console.error("Google Auth Error:", error.code, error.message);
